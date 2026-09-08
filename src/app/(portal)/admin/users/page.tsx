@@ -57,7 +57,7 @@ export default async function AdminUsersPage() {
           <CardTitle>All accounts</CardTitle>
         </CardHeader>
         <CardContent>
-          <UsersTable users={users} currentUserId={user.id} classes={classes} />
+          <UsersTable users={users} currentUserId={user.id} currentRole={user.role} classes={classes} />
         </CardContent>
       </Card>
     </div>

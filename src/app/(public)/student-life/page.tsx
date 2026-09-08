@@ -42,7 +42,7 @@ const galleryItems = [
   { src: "/excursio.webp", alt: "Students on an educational excursion" },
   { src: "/moment.webp", alt: "A memorable moment from campus life" },
   { src: "/logobg.jpg", alt: "The EL-BETH-EL school emblem" },
-  { src: "/graduand1.jpg", alt: "A recent EL-BETH-EL graduand" },
+  { src: "/moment.webp", alt: "A recent EL-BETH-EL graduand and a memorable campus moment" },
   { src: "/hero.webp", alt: "Students and campus at EL-BETH-EL" },
 ];
 

@@ -59,10 +59,12 @@ function generatePassword() {
 export function UsersTable({
   users,
   currentUserId,
+  currentRole,
   classes,
 }: {
   users: UserRow[];
   currentUserId: string;
+  currentRole: string;
   classes: ClassOption[];
 }) {
   const router = useRouter();
@@ -404,7 +406,9 @@ export function UsersTable({
                 <option value="PARENT">Parent</option>
                 <option value="TEACHER">Teacher</option>
                 <option value="ADMIN">Admin</option>
-                <option value="SUPER_ADMIN">Super Admin</option>
+                {currentRole === "SUPER_ADMIN" && (
+                  <option value="SUPER_ADMIN">Super Admin</option>
+                )}
               </Select>
             </Field>
           </div>

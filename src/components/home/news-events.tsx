@@ -17,7 +17,7 @@ export async function NewsEvents() {
   let events: { title: string; description: string | null; startDate: Date }[] = [];
   try {
     events = await prisma.event.findMany({
-      where: { isPublic: true },
+      where: { isPublic: true, startDate: { gte: new Date() } },
       orderBy: { startDate: "asc" },
       take: 3,
     });

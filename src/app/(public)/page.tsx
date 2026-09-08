@@ -11,6 +11,8 @@ import { NewsEvents } from "@/components/home/news-events";
 import { AdmissionsCTA } from "@/components/home/admissions-cta";
 import { StatsStrip } from "@/components/home/stats-strip";
 
+export const dynamic = "force-dynamic";
+
 export const metadata: Metadata = {
   title: "EL-BETH-EL The Kings' School | Fountain of Knowledge",
   description:

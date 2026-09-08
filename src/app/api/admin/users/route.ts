@@ -16,6 +16,10 @@ export async function POST(request: Request) {
 
   const body = await request.json().catch(() => ({}));
 
+  if (body.role === "SUPER_ADMIN" && role !== "SUPER_ADMIN") {
+    return NextResponse.json({ error: "Only Super Admins can create Super Admins" }, { status: 403 });
+  }
+
   try {
     const user = await createUserAccount({
       fullName: String(body.fullName ?? ""),

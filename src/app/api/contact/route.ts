@@ -2,10 +2,10 @@ import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { notifyAdminsOfContactMessage } from "@/lib/notify";
 
-const contactSchema = {
+const contactSchema: Record<string, "string" | "optional"> = {
   name: "string",
   email: "string",
-  phone: "string",
+  phone: "optional",
   subject: "string",
   message: "string",
 };
@@ -15,7 +15,17 @@ export async function POST(request: Request) {
     const body = await request.json();
 
     for (const key of Object.keys(contactSchema)) {
-      if (typeof body[key] !== "string" || !body[key].trim()) {
+      const value = body[key as keyof typeof contactSchema];
+      if (contactSchema[key] === "optional") {
+        if (value !== undefined && value !== null && typeof value !== "string") {
+          return NextResponse.json(
+            { error: "Enter a valid phone number" },
+            { status: 400 },
+          );
+        }
+        continue;
+      }
+      if (typeof value !== "string" || !value.trim()) {
         return NextResponse.json(
           { error: `${key} is required` },
           { status: 400 },
@@ -30,7 +40,7 @@ export async function POST(request: Request) {
       );
     }
 
-    const message = await prisma.contactMessage.create({
+    await prisma.contactMessage.create({
       data: {
         name: body.name.trim().slice(0, 200),
         email: body.email.trim().slice(0, 254),

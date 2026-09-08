@@ -56,6 +56,9 @@ export async function PATCH(request: Request, { params }: RouteContext) {
       if (!ROLES.includes(body.role)) {
         return NextResponse.json({ error: "Invalid role" }, { status: 400 });
       }
+      if (body.role === "SUPER_ADMIN" && role !== "SUPER_ADMIN") {
+        return NextResponse.json({ error: "Only Super Admins can promote to Super Admin" }, { status: 403 });
+      }
       if (body.role !== target.role && (await isLastSuperAdmin(id)) && body.role !== "SUPER_ADMIN") {
         return NextResponse.json(
           { error: "You cannot demote the last active Super Admin" },
@@ -76,10 +79,20 @@ export async function PATCH(request: Request, { params }: RouteContext) {
 
     // Reassign form classes for a teacher account.
     if (body.classIds !== undefined && updated.role === "TEACHER") {
+      const teacherProfile = await prisma.teacher.findUnique({
+        where: { userId: id },
+        select: { id: true },
+      });
+      if (!teacherProfile) {
+        return NextResponse.json(
+          { error: "No teacher profile exists for this account yet" },
+          { status: 400 },
+        );
+      }
       const classIds = Array.isArray(body.classIds)
         ? body.classIds.filter((c: unknown): c is string => typeof c === "string")
         : [];
-      await setTeacherClasses(updated.id, classIds);
+      await setTeacherClasses(teacherProfile.id, classIds);
     }
 
     await writeAudit({

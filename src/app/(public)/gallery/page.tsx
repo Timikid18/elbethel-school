@@ -13,10 +13,14 @@ export const metadata: Metadata = {
 
 export const dynamic = "force-dynamic";
 
-const graduands = Array.from({ length: 10 }, (_, i) => ({
-  src: `/graduand${i + 1}.jpg`,
-  alt: `EL-BETH-EL The Kings' School graduand photo ${i + 1}`,
-}));
+const graduands = [
+  { src: "/moment.webp", alt: "A memorable moment from campus life at EL-BETH-EL The Kings' School" },
+  { src: "/excursio.webp", alt: "Students on an educational excursion" },
+  { src: "/classroom.webp", alt: "Students learning in a classroom" },
+  { src: "/director.webp", alt: "The school director at EL-BETH-EL" },
+  { src: "/logobg.jpg", alt: "The EL-BETH-EL school emblem" },
+  { src: "/hero.webp", alt: "Students and campus at EL-BETH-EL" },
+];
 
 let uploaded: { id: string; caption: string; alt: string | null; dataUrl: string }[] = [];
 try {
@@ -54,7 +58,7 @@ export default function GalleryPage() {
             <p className="text-sm text-ink-soft">
               {hasUploaded
                 ? `${uploaded.length} photo${uploaded.length === 1 ? "" : "s"} from our community`
-                : `Celebrating our most recent graduating class · ${graduands.length} photos`}
+                : `A look back at life on our campus · ${graduands.length} photos`}
             </p>
           </div>
         </Reveal>
