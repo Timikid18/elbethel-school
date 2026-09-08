@@ -1,36 +1,57 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# EL-BETH-EL The Kings' School
 
-## Getting Started
+School website with public pages, an admissions system, and role-based portals (administrator, teacher, student, parent) built with Next.js (App Router), React 19, Tailwind CSS v4, Prisma, and PostgreSQL (hosted on Neon). Deployed on Vercel.
 
-First, run the development server:
+## Tech stack
+
+- **Framework:** Next.js 16 (App Router, TypeScript)
+- **UI:** Tailwind CSS v4, lucide-react, recharts
+- **Data:** Prisma 7 + PostgreSQL (Neon), driver adapter `@prisma/adapter-pg`
+- **Auth:** NextAuth v5 (credentials + JWT sessions)
+- **Email/WhatsApp notifications:** optional SMTP + Twilio (best-effort, silent when unconfigured)
+
+## Getting started
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Requires a `DATABASE_URL` pointing at a PostgreSQL database (the app no longer uses SQLite). Create a free project at Neon, copy the connection string into `.env`:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+DATABASE_URL="postgresql://..."
+AUTH_SECRET="<generate one>"
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Apply schema and seed demo data:
 
-## Learn More
+```bash
+npx prisma migrate deploy
+npm run db:seed
+```
 
-To learn more about Next.js, take a look at the following resources:
+## Scripts
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+| Command | Purpose |
+|---------|---------|
+| `npm run dev` | Start dev server |
+| `npm run build` | Production build |
+| `npm start` | Run production server |
+| `npm run lint` | ESLint |
+| `npm run db:migrate` | Apply Prisma migrations |
+| `npm run db:seed` | Seed demo data |
+| `npm run create-admin` | Create an admin account |
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Demo accounts
 
-## Deploy on Vercel
+Seeded accounts (password `Password123!`) — sign in at `/login`:
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- Super Admin: `admin@elbethel.edu`
+- Teacher: `teacher@elbethel.edu`
+- Student: `student@elbethel.edu`
+- Parent: `parent@elbethel.edu`
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Deployment
+
+Connected to Vercel via Git — pushing to `main` auto-deploys to production. Required environment variables on Vercel: `DATABASE_URL`, `AUTH_SECRET`, `NEXTAUTH_URL`, `NEXT_PUBLIC_APP_URL`. Optional: `SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_PASSWORD`, `SMTP_FROM`, `ADMIN_NOTIFY_EMAIL`, and the `TWILIO_*` variables.
