@@ -7,7 +7,18 @@ import { SignOutButton } from "@/components/portal/sign-out-button";
 import { ThemeToggle } from "@/components/theme/theme-toggle";
 import { LogoMark } from "@/components/ui/logo";
 import { cn } from "@/lib/utils";
-import { Menu, X, LayoutDashboard, Inbox, MessageSquare } from "lucide-react";
+import {
+  Menu,
+  X,
+  LayoutDashboard,
+  Inbox,
+  MessageSquare,
+  Users,
+  ClipboardCheck,
+  Megaphone,
+  Image,
+  GraduationCap,
+} from "lucide-react";
 
 export function PortalShell({
   userName,
@@ -21,12 +32,25 @@ export function PortalShell({
   const [open, setOpen] = React.useState(false);
   const pathname = usePathname();
 
+  const isAdmin = role === "SUPER_ADMIN" || role === "ADMIN";
+
   const nav = [
-    { href: "/dashboard", label: "Overview", icon: LayoutDashboard },
-    ...(role === "SUPER_ADMIN" || role === "ADMIN"
+    { href: "/dashboard", label: "Overview", icon: LayoutDashboard, active: pathname === "/dashboard" },
+    ...(isAdmin
       ? [
-          { href: "/admin/admissions", label: "Admissions", icon: Inbox },
-          { href: "/admin/contact", label: "Contact messages", icon: MessageSquare },
+          { href: "/admin/dashboard", label: "Admin home", icon: LayoutDashboard, active: pathname === "/admin/dashboard" },
+          { href: "/admin/users", label: "Users", icon: Users, active: pathname.startsWith("/admin/users") },
+          { href: "/admin/approvals", label: "Approvals", icon: ClipboardCheck, active: pathname.startsWith("/admin/approvals") },
+          { href: "/admin/announcements", label: "Announcements", icon: Megaphone, active: pathname.startsWith("/admin/announcements") },
+          { href: "/admin/gallery", label: "Gallery", icon: Image, active: pathname.startsWith("/admin/gallery") },
+          { href: "/admin/admissions", label: "Admissions", icon: Inbox, active: pathname.startsWith("/admin/admissions") },
+          { href: "/admin/contact", label: "Contact messages", icon: MessageSquare, active: pathname.startsWith("/admin/contact") },
+        ]
+      : []),
+    ...(role === "TEACHER"
+      ? [
+          { href: "/teacher/students", label: "My students", icon: GraduationCap, active: pathname.startsWith("/teacher/students") },
+          { href: "/teacher/announcements", label: "Class announcements", icon: Megaphone, active: pathname.startsWith("/teacher/announcements") },
         ]
       : []),
   ];
@@ -42,7 +66,6 @@ export function PortalShell({
       </Link>
       <nav className="flex-1 space-y-1 px-3">
         {nav.map((item) => {
-          const active = pathname === item.href;
           return (
             <Link
               key={item.href}
@@ -50,16 +73,16 @@ export function PortalShell({
               onClick={() => setOpen(false)}
               className={cn(
                 "group flex items-center gap-3 rounded-[var(--radius)] px-3 py-2.5 text-sm font-medium transition-colors",
-                active
+                item.active
                   ? "bg-royal text-white shadow-sm"
                   : "text-ink-soft hover:bg-ash-100 hover:text-ink",
               )}
-              aria-current={active ? "page" : undefined}
+              aria-current={item.active ? "page" : undefined}
             >
               <item.icon
                 className={cn(
                   "h-4 w-4",
-                  active
+                  item.active
                     ? "text-gold"
                     : "text-ash-500 group-hover:text-royal-accent",
                 )}

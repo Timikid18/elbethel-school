@@ -12,6 +12,8 @@ export const metadata: Metadata = {
     "Announcements, school news and upcoming events from EL-BETH-EL The Kings' School.",
 };
 
+export const dynamic = "force-dynamic";
+
 const monthNames = [
   "January", "February", "March", "April", "May", "June",
   "July", "August", "September", "October", "November", "December",

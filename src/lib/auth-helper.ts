@@ -37,7 +37,7 @@ export async function getSession() {
 export async function requireUser() {
   const session = await auth();
   if (!session?.user) {
-    redirect(`/login?callbackUrl=${encodeURIComponent("/")}`);
+    redirect(`/login?callbackUrl=${encodeURIComponent("/dashboard")}`);
   }
   return session.user;
 }
@@ -74,6 +74,7 @@ export function getDashboardRoute(role: string | undefined): string {
     case "SUPER_ADMIN":
       return "/super-admin/dashboard";
     case "ADMIN":
+      return "/admin/dashboard";
     case "TEACHER":
       return "/teacher/dashboard";
     case "PARENT":

@@ -79,6 +79,28 @@ enum NotificationType {
   SYSTEM
 }
 
+enum ChangeEntity {
+  ANNOUNCEMENT
+  CLASS_ANNOUNCEMENT
+  CLASS_ASSIGNMENT
+  PROFILE
+  RESULT
+  STUDENT
+  OTHER
+}
+
+enum ChangeAction {
+  CREATE
+  UPDATE
+  DELETE
+}
+
+enum ChangeStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
 // ============ ACCOUNTS & IDENTITY ============
 
 model User {
@@ -100,6 +122,9 @@ model User {
 
   notifications UserNotification[]
   auditLogs     AuditLog[]
+
+  changeRequests        ChangeRequest[] @relation("ChangeRequestRequester")
+  reviewedChangeRequests ChangeRequest[] @relation("ChangeRequestReviewer")
 }
 
 model Student {
@@ -516,6 +541,43 @@ model ContactMessage {
   createdAt DateTime @default(now())
 
   @@index([createdAt])
+}
+
+// ============ MODERATION (change requests) ============
+
+model ChangeRequest {
+  id          String       @id @default(cuid())
+  entityType  ChangeEntity
+  actionType  ChangeAction
+  entityId    String?
+  payload     Json
+  summary     String
+  status      ChangeStatus @default(PENDING)
+  requesterId String
+  requester   User         @relation("ChangeRequestRequester", fields: [requesterId], references: [id])
+  reviewerId  String?
+  reviewer    User?        @relation("ChangeRequestReviewer", fields: [reviewerId], references: [id])
+  reviewNote  String?
+  reviewedAt  DateTime?
+  createdAt   DateTime     @default(now())
+
+  @@index([status])
+  @@index([requesterId])
+}
+
+// ============ GALLERY ============
+
+model GalleryImage {
+  id          String   @id @default(cuid())
+  caption     String
+  alt         String?
+  dataUrl     String
+  width       Int?
+  height      Int?
+  uploaderId  String?
+  isPublished Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 }
 
 // ============ SECURITY / AUDIT ============

@@ -358,6 +358,26 @@ async function main() {
     },
   });
 
+  // ---------- CHANGE REQUESTS (demo for moderation) ----------
+  await prisma.changeRequest.upsert({
+    where: { id: "seed-request-1" },
+    update: {},
+    create: {
+      id: "seed-request-1",
+      entityType: "CLASS_ANNOUNCEMENT",
+      actionType: "CREATE",
+      summary: "Announcement for Grade 5: Parent-teacher conference",
+      payload: {
+        title: "Parent-Teacher Conference",
+        body: "Parent-teacher conferences will hold on Friday in the Grade 5 classroom. Kindly arrive at the school office by 9am to be signed in.",
+        classId: classes["Grade 5"],
+        isPinned: false,
+      },
+      requesterId: teacherUser.id,
+      status: "PENDING",
+    },
+  });
+
   // ---------- EVENTS ----------
   await prisma.event.upsert({
     where: { id: "seed-event-1" },
