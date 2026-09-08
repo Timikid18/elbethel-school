@@ -1,0 +1,12 @@
+.env
+.env.*
+!.env.example
+node_modules
+.next
+out
+.git
+dev.db
+dev.db-journal
+*.tsbuildinfo
+next-env.d.ts
+elbethel-upload.zip
