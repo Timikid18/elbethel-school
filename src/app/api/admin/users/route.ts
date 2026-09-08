@@ -23,6 +23,7 @@ export async function POST(request: Request) {
       password: String(body.password ?? ""),
       role: body.role,
       phone: body.phone ? String(body.phone) : undefined,
+      classId: body.classId ? String(body.classId) : undefined,
     });
 
     await writeAudit({

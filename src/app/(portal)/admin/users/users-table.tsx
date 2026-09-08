@@ -12,6 +12,8 @@ import {
   Eye,
   EyeOff,
   Wand2,
+  GraduationCap,
+  Check,
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -30,6 +32,8 @@ export type UserRow = {
   status: string;
   createdAt: Date | string;
 };
+
+export type ClassOption = { id: string; name: string };
 
 const ROLE_TONE: Record<string, "royal" | "golden" | "success" | "warning" | "neutral" | "info" | "danger"> = {
   SUPER_ADMIN: "danger",
@@ -55,16 +59,19 @@ function generatePassword() {
 export function UsersTable({
   users,
   currentUserId,
+  classes,
 }: {
   users: UserRow[];
   currentUserId: string;
+  classes: ClassOption[];
 }) {
   const router = useRouter();
   const { toast } = useToast();
 
-const [createOpen, setCreateOpen] = React.useState(false);
+  const [createOpen, setCreateOpen] = React.useState(false);
   const [resetUser, setResetUser] = React.useState<UserRow | null>(null);
   const [confirmDelete, setConfirmDelete] = React.useState<UserRow | null>(null);
+  const [classTeacher, setClassTeacher] = React.useState<UserRow | null>(null);
   const [busy, setBusy] = React.useState(false);
   const [error, setError] = React.useState("");
 
@@ -73,6 +80,7 @@ const [createOpen, setCreateOpen] = React.useState(false);
     email: "",
     phone: "",
     role: "STUDENT",
+    classId: "",
     password: generatePassword(),
     showPassword: true,
   });
@@ -100,6 +108,7 @@ const [createOpen, setCreateOpen] = React.useState(false);
           phone: newUser.phone,
           role: newUser.role,
           password: newUser.password,
+          classId: newUser.classId || undefined,
         }),
       });
       const data = await res.json();
@@ -175,6 +184,47 @@ const [createOpen, setCreateOpen] = React.useState(false);
     } catch (err) {
       toast({ type: "error", title: "Delete failed", message: err instanceof Error ? err.message : undefined });
       setConfirmDelete(null);
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  const [selectedClasses, setSelectedClasses] = React.useState<string[]>([]);
+
+  function openClassTeacherModal(teacher: UserRow) {
+    setError("");
+    setClassTeacher(teacher);
+    setSelectedClasses([]);
+    setBusy(false);
+  }
+
+  function toggleClass(id: string) {
+    setSelectedClasses((prev) =>
+      prev.includes(id) ? prev.filter((c) => c !== id) : [...prev, id],
+    );
+  }
+
+  async function onSaveClasses() {
+    if (!classTeacher) return;
+    setBusy(true);
+    setError("");
+    try {
+      const res = await fetch(`/api/admin/users/${classTeacher.id}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ classIds: selectedClasses }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error ?? "Update failed");
+      toast({
+        type: "success",
+        title: "Classes updated",
+        message: `${classTeacher.fullName} is now form teacher of ${selectedClasses.length} class${selectedClasses.length === 1 ? "" : "es"}.`,
+      });
+      setClassTeacher(null);
+      router.refresh();
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Could not update classes");
     } finally {
       setBusy(false);
     }
@@ -272,6 +322,17 @@ const [createOpen, setCreateOpen] = React.useState(false);
                       >
                         <UserX className="h-4 w-4 text-danger" />
                       </Button>
+                      {user.role === "TEACHER" && (
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          aria-label="Assign classes"
+                          disabled={busy}
+                          onClick={() => openClassTeacherModal(user)}
+                        >
+                          <GraduationCap className="h-4 w-4" />
+                        </Button>
+                      )}
                     </div>
                   </td>
                 </tr>
@@ -347,6 +408,30 @@ const [createOpen, setCreateOpen] = React.useState(false);
               </Select>
             </Field>
           </div>
+          {(newUser.role === "TEACHER" || newUser.role === "STUDENT") && (
+            <Field
+              label={newUser.role === "TEACHER" ? "Form class" : "Class"}
+              htmlFor="cr-class"
+              hint={
+                newUser.role === "TEACHER"
+                  ? "The class they will manage as form teacher."
+                  : undefined
+              }
+            >
+              <Select
+                id="cr-class"
+                value={newUser.classId}
+                onChange={(e) => setForm("classId", e.target.value)}
+              >
+                <option value="">{newUser.role === "TEACHER" ? "No class assigned" : "No class"}</option>
+                {classes.map((c) => (
+                  <option key={c.id} value={c.id}>
+                    {c.name}
+                  </option>
+                ))}
+              </Select>
+            </Field>
+          )}
           <Field
             label="Password"
             required
@@ -449,6 +534,65 @@ const [createOpen, setCreateOpen] = React.useState(false);
             </div>
           </Field>
         </form>
+      </Modal>
+
+      {/* Assign classes modal */}
+      <Modal
+        open={!!classTeacher}
+        onClose={() => setClassTeacher(null)}
+        title={classTeacher ? `Assign classes — ${classTeacher.fullName}` : "Assign classes"}
+        description="Choose the class(es) this teacher is form teacher for."
+        hideClose={busy}
+        footer={
+          <>
+            <Button variant="outline" onClick={() => setClassTeacher(null)} disabled={busy}>
+              Cancel
+            </Button>
+            <Button onClick={onSaveClasses} loading={busy}>
+              Save classes
+            </Button>
+          </>
+        }
+      >
+        <div className="space-y-3">
+          {error && (
+            <div role="alert" className="rounded-[var(--radius)] border border-danger bg-danger-soft px-4 py-3 text-sm text-danger">
+              {error}
+            </div>
+          )}
+          {classes.length === 0 ? (
+            <p className="py-6 text-center text-sm text-ink-soft">
+              No classes exist yet. Run the database seed to create them.
+            </p>
+          ) : (
+            classes.map((c) => {
+              const checked = selectedClasses.includes(c.id);
+              return (
+                <label
+                  key={c.id}
+                  className={`flex cursor-pointer items-center justify-between gap-3 rounded-[var(--radius)] border px-4 py-3 text-sm transition-colors ${
+                    checked ? "border-royal-accent bg-royal-50" : "border-border bg-surface hover:bg-ash-50"
+                  }`}
+                >
+                  <span className="font-medium text-ink">{c.name}</span>
+                  <span
+                    className={`flex h-5 w-5 items-center justify-center rounded border ${
+                      checked ? "border-royal-accent bg-royal-accent text-white" : "border-ash-400 bg-surface"
+                    }`}
+                  >
+                    {checked && <Check className="h-3.5 w-3.5" />}
+                  </span>
+                  <input
+                    type="checkbox"
+                    className="sr-only"
+                    checked={checked}
+                    onChange={() => toggleClass(c.id)}
+                  />
+                </label>
+              );
+            })
+          )}
+        </div>
       </Modal>
 
       <ConfirmationDialog

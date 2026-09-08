@@ -6,6 +6,7 @@ import { format } from "date-fns";
 import { Badge } from "@/components/ui/badge";
 import { Select } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
+import { Modal } from "@/components/ui/modal";
 import { RefreshCw } from "lucide-react";
 
 export type ApplicationRow = {
@@ -43,11 +44,13 @@ const STATUS_OPTIONS = [
   "SUBMITTED",
   "UNDER_REVIEW",
   "INTERVIEW",
+  "ENROLLED",
   "ACCEPTED",
   "WAITLISTED",
   "REJECTED",
-  "ENROLLED",
 ];
+
+type Credentials = { email: string; password: string };
 
 export function AdmissionsTable({
   applications,
@@ -57,6 +60,7 @@ export function AdmissionsTable({
   const router = useRouter();
   const [saving, setSaving] = React.useState<string | null>(null);
   const [error, setError] = React.useState<string | null>(null);
+  const [credentials, setCredentials] = React.useState<Credentials | null>(null);
 
   async function onStatusChange(id: string, status: string) {
     setSaving(id);
@@ -67,10 +71,12 @@ export function AdmissionsTable({
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ status }),
       });
-      if (!res.ok) throw new Error("Update failed");
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error ?? "Update failed");
+      if (data.credentials) setCredentials(data.credentials);
       router.refresh();
-    } catch {
-      setError("Could not update the application status. Please try again.");
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Could not update the application status.");
     } finally {
       setSaving(null);
     }
@@ -154,6 +160,34 @@ export function AdmissionsTable({
           </table>
         </div>
       )}
+
+      {/* One-time login credentials after acceptance */}
+      <Modal
+        open={!!credentials}
+        onClose={() => setCredentials(null)}
+        title="Student login credentials"
+        description="This student account was created and placed in the class applied for. Share these credentials — they are shown only once."
+        footer={
+          <Button onClick={() => setCredentials(null)}>Done</Button>
+        }
+      >
+        {credentials && (
+          <div className="space-y-4">
+            <div className="rounded-[var(--radius)] border border-border bg-ash-50 p-4">
+              <p className="text-xs font-medium uppercase tracking-wide text-ink-soft">Email</p>
+              <p className="mt-1 break-all font-mono text-sm font-medium text-ink">{credentials.email}</p>
+            </div>
+            <div className="rounded-[var(--radius)] border border-border bg-ash-50 p-4">
+              <p className="text-xs font-medium uppercase tracking-wide text-ink-soft">Password</p>
+              <p className="mt-1 break-all font-mono text-sm font-medium text-ink">{credentials.password}</p>
+            </div>
+            <p className="text-sm text-ink-soft">
+              The student will appear in their form teacher&apos;s roster immediately. You can always reset
+              the password later under Users.
+            </p>
+          </div>
+        )}
+      </Modal>
     </div>
   );
 }

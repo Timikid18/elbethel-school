@@ -6,6 +6,7 @@ import {
   resetUserPassword,
   deleteUserAccount,
   isLastSuperAdmin,
+  setTeacherClasses,
   ROLES,
 } from "@/lib/users";
 import { writeAudit } from "@/lib/moderation";
@@ -71,6 +72,14 @@ export async function PATCH(request: Request, { params }: RouteContext) {
     let updated = target;
     if (Object.keys(data).length > 0) {
       updated = await prisma.user.update({ where: { id }, data });
+    }
+
+    // Reassign form classes for a teacher account.
+    if (body.classIds !== undefined && updated.role === "TEACHER") {
+      const classIds = Array.isArray(body.classIds)
+        ? body.classIds.filter((c: unknown): c is string => typeof c === "string")
+        : [];
+      await setTeacherClasses(updated.id, classIds);
     }
 
     await writeAudit({

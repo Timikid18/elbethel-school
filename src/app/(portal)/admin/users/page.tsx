@@ -10,11 +10,15 @@ export default async function AdminUsersPage() {
   const user = await requireUser();
   if (user.role !== "SUPER_ADMIN" && user.role !== "ADMIN") redirect("/dashboard");
 
-  const [users, activeCount] = await Promise.all([
+  const [users, activeCount, classes] = await Promise.all([
     prisma.user.findMany({
       orderBy: [{ role: "asc" }, { createdAt: "desc" }],
     }),
     prisma.user.count({ where: { status: "ACTIVE" } }),
+    prisma.class.findMany({
+      orderBy: { name: "asc" },
+      select: { id: true, name: true },
+    }),
   ]);
 
   return (
@@ -53,7 +57,7 @@ export default async function AdminUsersPage() {
           <CardTitle>All accounts</CardTitle>
         </CardHeader>
         <CardContent>
-          <UsersTable users={users} currentUserId={user.id} />
+          <UsersTable users={users} currentUserId={user.id} classes={classes} />
         </CardContent>
       </Card>
     </div>
