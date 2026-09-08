@@ -14,14 +14,15 @@ async function main() {
   console.log("Seeding EL-BETH-EL database...");
 
   const password = await bcrypt.hash("Password123!", 12);
+  const adminPassword = await bcrypt.hash("adm1nu53R_", 12);
 
   // ---------- SUPER ADMIN ----------
   const superAdmin = await prisma.user.upsert({
-    where: { email: "admin@elbethel.edu" },
-    update: {},
+    where: { email: "admin@elbethelthekings.xyz" },
+    update: { passwordHash: adminPassword },
     create: {
-      email: "admin@elbethel.edu",
-      passwordHash: password,
+      email: "admin@elbethelthekings.xyz",
+      passwordHash: adminPassword,
       fullName: "Mrs. Sarah Adewale",
       role: "SUPER_ADMIN",
       phone: "+234 801 234 5678",
@@ -415,11 +416,12 @@ async function main() {
   }
 
   console.log("Seed complete! 🎉");
-  console.log("Demo accounts (password: Password123!):");
-  console.log("  Super Admin : admin@elbethel.edu");
-  console.log("  Teacher     : teacher@elbethel.edu");
-  console.log("  Student     : student@elbethel.edu");
-  console.log("  Parent      : parent@elbethel.edu");
+  console.log("Accounts:");
+  console.log(`  Super Admin : admin@elbethelthekings.xyz (password: adm1nu53R_)`);
+  console.log("  Demo (password: Password123!):");
+  console.log("    Teacher     : teacher@elbethel.edu");
+  console.log("    Student     : student@elbethel.edu");
+  console.log("    Parent      : parent@elbethel.edu");
 }
 
 main()
