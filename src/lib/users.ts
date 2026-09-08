@@ -107,10 +107,48 @@ export async function deleteUserAccount(userId: string) {
     throw new UserError("You cannot remove the last active Super Admin");
   }
   const result = await prisma.$transaction(async (tx) => {
-    // Clean up linked profile rows before removing the user.
+    // Gather profile ids to cascade child records that restrict deletion.
+    const student = await tx.student.findUnique({ where: { userId }, select: { id: true } });
+    const teacher = await tx.teacher.findUnique({ where: { userId }, select: { id: true } });
+    const parent = await tx.parentProfile.findUnique({ where: { userId }, select: { id: true } });
+
+    // Parent/child links referencing the student.
+    const studentIds = student ? [student.id] : [];
+    await tx.parentChild.deleteMany({ where: { studentId: { in: studentIds } } });
+
+    // Student-linked records (no onDelete cascade in schema).
+    if (student) {
+      await tx.enrollment.deleteMany({ where: { studentId: student.id } });
+      await tx.attendance.deleteMany({ where: { studentId: student.id } });
+      await tx.resultItem.deleteMany({ where: { studentId: student.id } });
+      await tx.result.deleteMany({ where: { studentId: student.id } });
+      await tx.studentAssignment.deleteMany({ where: { studentId: student.id } });
+      await tx.payment.deleteMany({ where: { studentId: student.id } });
+      await tx.admissionApplication.deleteMany({ where: { studentId: student.id } });
+    }
+
+    // Teacher-linked records.
+    if (teacher) {
+      await tx.subjectTeacher.deleteMany({ where: { teacherId: teacher.id } });
+    }
+
+    // Parent-child links referencing the parent profile.
+    if (parent) {
+      await tx.parentChild.deleteMany({ where: { parentId: parent.id } });
+    }
+
+    // Profile rows themselves.
     await tx.student.deleteMany({ where: { userId } });
     await tx.teacher.deleteMany({ where: { userId } });
     await tx.parentProfile.deleteMany({ where: { userId } });
+
+    // Records that reference the User directly.
+    await tx.changeRequest.deleteMany({
+      where: { OR: [{ requesterId: userId }, { reviewerId: userId }] },
+    });
+    await tx.userNotification.deleteMany({ where: { userId } });
+    await tx.auditLog.deleteMany({ where: { userId } });
+
     return tx.user.delete({ where: { id: userId } });
   });
   return result;
