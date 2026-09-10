@@ -417,6 +417,40 @@ html.dark .lift-card {
   .marquee-track { animation: none; }
 }
 
+/* ---------- AI assistant widget ---------- */
+@keyframes ai-widget-halo {
+  0% {
+    transform: scale(1);
+    opacity: 0.6;
+  }
+  70% {
+    transform: scale(1.75);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1.75);
+    opacity: 0;
+  }
+}
+.ai-widget-halo {
+  animation: ai-widget-halo 2.6s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@keyframes ai-widget-beat {
+  0%, 100% { transform: scale(1); }
+  14% { transform: scale(1.1); }
+  28% { transform: scale(1); }
+  42% { transform: scale(1.07); }
+  70% { transform: scale(1); }
+}
+.ai-widget-beat {
+  animation: ai-widget-beat 1.8s ease-in-out infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .ai-widget-halo,
+  .ai-widget-beat { animation: none; }
+}
+
 /* ---------- Page-load preloader (rolling logo) ---------- */
 .page-load-overlay {
   position: fixed;

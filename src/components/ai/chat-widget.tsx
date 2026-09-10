@@ -79,17 +79,21 @@ export function ChatWidget() {
         onClick={() => setOpen((v) => !v)}
         aria-label={open ? "Close assistant" : "Chat with the EL-BETH-EL assistant"}
         aria-expanded={open}
-        className="fixed bottom-5 right-5 z-50 flex h-14 w-14 items-center justify-center rounded-full bg-royal text-white shadow-lg shadow-royal/30 transition-all hover:bg-royal-600 active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-royal-400"
+        className="ai-widget-beat fixed bottom-5 right-5 z-50 flex h-14 w-14 items-center justify-center rounded-full bg-royal text-white shadow-[0_0_24px_rgba(21,48,107,0.45)] ring-4 ring-royal/25 transition-colors hover:bg-royal-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-royal-400 active:scale-95"
       >
+        <span
+          aria-hidden="true"
+          className="ai-widget-halo pointer-events-none absolute inset-0 rounded-full bg-royal/50"
+        />
         {open ? (
-          <X className="h-6 w-6" />
+          <X className="relative h-6 w-6" />
         ) : (
           <Image
             src="/ebksAI.png"
             alt=""
             width={32}
             height={32}
-            className="h-8 w-8 rounded-full object-cover"
+            className="relative h-8 w-8 rounded-full object-cover"
           />
         )}
       </button>
