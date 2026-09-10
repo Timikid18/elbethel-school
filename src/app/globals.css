@@ -650,6 +650,15 @@ mask-image: linear-gradient(to top, black 30%, transparent 85%);
   50% { opacity: 1; transform: translate(-50%, -50%) scale(1.06); }
 }
 
+/* ---------- Admission promo card ---------- */
+@keyframes promo-in {
+  from { opacity: 0; transform: scale(0.96); }
+  to { opacity: 1; transform: scale(1); }
+}
+.promo-card {
+  animation: promo-in 0.35s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .preloader-logo,
   .preloader-logo__ring,
@@ -662,5 +671,9 @@ mask-image: linear-gradient(to top, black 30%, transparent 85%);
   .page-load-overlay {
     animation-duration: 0s;
     animation-delay: 2.6s;
+  }
+  .promo-card {
+    animation: none;
+    opacity: 1;
   }
 }

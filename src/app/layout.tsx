@@ -5,6 +5,7 @@ import { ToastProvider } from "@/components/ui/toast";
 import { PageLoadOverlay } from "@/components/ui/page-load-overlay";
 import { ThemeProvider } from "@/components/theme/theme-provider";
 import { ChatWidget } from "@/components/ai/chat-widget";
+import { PromoCard } from "@/components/ui/promo-card";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -65,6 +66,7 @@ export default function RootLayout({
           <ToastProvider>{children}</ToastProvider>
           <PageLoadOverlay />
           <ChatWidget />
+          <PromoCard />
         </ThemeProvider>
       </body>
     </html>
