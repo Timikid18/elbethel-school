@@ -2,11 +2,11 @@
 
 import * as React from "react";
 import { signIn } from "next-auth/react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Field } from "@/components/ui/field";
-import { LogoMark } from "@/components/ui/logo";
+
 import { Mail, Lock, AlertCircle, Eye, EyeOff } from "lucide-react";
 
 export function LoginForm() {
@@ -14,15 +14,12 @@ export function LoginForm() {
     process.env.NEXT_PUBLIC_SHOW_DEMO_LOGIN === "true",
   );
   const router = useRouter();
-  const searchParams = useSearchParams();
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
   const [show, setShow] = React.useState(false);
   const [error, setError] = React.useState<string | null>(null);
   const [loading, setLoading] = React.useState(false);
 
-  const redirectTo =
-    searchParams.get("callbackUrl")?.replace(/^\//, "") || "/";
 
   async function onSubmit(e: React.FormEvent) {
     e.preventDefault();

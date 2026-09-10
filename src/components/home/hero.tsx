@@ -1,4 +1,4 @@
-import Link from "next/link";
+
 import Image from "next/image";
 import { ArrowRight, Sparkles, ShieldCheck, Award, Heart } from "lucide-react";
 import { Reveal } from "@/components/ui/reveal";

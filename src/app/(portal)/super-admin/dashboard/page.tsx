@@ -15,14 +15,12 @@ export default async function SuperAdminDashboardPage() {
   const [
     pending,
     students,
-    teachers,
     todayApps,
     recentApps,
     unreadContacts,
   ] = await Promise.all([
     prisma.admissionApplication.count({ where: { status: "SUBMITTED" } }),
     prisma.student.count(),
-    prisma.teacher.count(),
     prisma.admissionApplication.count({
       where: { createdAt: { gte: new Date(new Date().setHours(0, 0, 0, 0)) } },
     }),

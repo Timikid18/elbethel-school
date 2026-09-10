@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ArrowRight, CalendarDays, Megaphone } from "lucide-react";
+import { ArrowRight, CalendarDays } from "lucide-react";
 import { SectionHeading } from "./section-heading";
 import { Reveal } from "../ui/reveal";
 import { prisma } from "@/lib/prisma";

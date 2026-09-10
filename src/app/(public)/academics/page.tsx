@@ -7,7 +7,7 @@ import {
   Layers,
   FlaskConical,
   Users,
-  FileCheck2,
+
 } from "lucide-react";
 import { PageHeader } from "@/components/public/page-header";
 import { Reveal } from "@/components/ui/reveal";

@@ -19,9 +19,6 @@ const monthNames = [
   "July", "August", "September", "October", "November", "December",
 ];
 
-function formatLong(d: Date) {
-  return `${monthNames[d.getMonth()]} ${d.getDate()}, ${d.getFullYear()}`;
-}
 
 const fallbackAnnouncements = [
   {

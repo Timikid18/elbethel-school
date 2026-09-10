@@ -28,7 +28,7 @@ export default function ApplyPage() {
               <p className="font-semibold text-ink">Need help with your application?</p>
               <p className="mt-1">
                 Contact the admissions office at <span className="font-medium text-ink">0809 876 2044</span> or{" "}
-                <span className="font-medium text-ink">vadeyemo24@gmail.com</span>, Monday to Friday during school hours.
+                <span className="font-medium text-ink">admin@elbethelthekings.xyz</span>, Monday to Friday during school hours.
               </p>
             </div>
           </Reveal>

@@ -160,7 +160,7 @@ export function PublicFooter() {
             </li>
             <li className="flex gap-2.5">
               <Mail className="mt-0.5 h-4 w-4 shrink-0 text-gold" />
-              <span className="break-all">vadeyemo24@gmail.com</span>
+              <span className="break-all">admin@elbethelthekings.xyz</span>
             </li>
           </ul>
         </div>

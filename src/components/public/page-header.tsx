@@ -41,7 +41,7 @@ export function PageHeader({
               aria-label="Breadcrumb"
               className="mb-8 flex items-center gap-1.5 text-sm text-royal-300"
             >
-              {breadcrumb.map((b, i) => (
+              {breadcrumb.map((b) => (
                 <span key={b.label} className="flex items-center gap-1.5">
                   {b.href ? (
                     <>

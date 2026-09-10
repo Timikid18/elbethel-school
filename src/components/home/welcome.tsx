@@ -1,6 +1,6 @@
 import Image from "next/image";
 import { ArrowRight } from "lucide-react";
-import { Reveal } from "@/components/ui/reveal";
+
 import { ButtonLink } from "@/components/ui/button";
 
 export function Welcome() {

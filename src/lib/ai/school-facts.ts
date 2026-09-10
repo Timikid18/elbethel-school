@@ -5,7 +5,7 @@ export const SCHOOL_FACTS = {
   location: "No 12, Ija Road, Egan, Igando, Lagos State, Nigeria.",
   phones: ["0809 876 2044", "0903 191 7478"],
   whatsapp: "0809 876 2044",
-  email: "vadeyemo24@gmail.com",
+  email: "admin@elbethelthekings.xyz",
   officeHours: [
     "Monday - Friday: 7:30 AM - 4:00 PM",
     "Saturday: 9:00 AM - 1:00 PM",

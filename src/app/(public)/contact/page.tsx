@@ -30,7 +30,7 @@ const channels = [
   {
     icon: Mail,
     title: "Email Us",
-    lines: ["vadeyemo24@gmail.com"],
+    lines: ["admin@elbethelthekings.xyz"],
   },
 ];
 

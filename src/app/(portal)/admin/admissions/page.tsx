@@ -2,8 +2,7 @@ import { redirect } from "next/navigation";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { requireUser } from "@/lib/auth-helper";
 import { prisma } from "@/lib/prisma";
-import { Badge } from "@/components/ui/badge";
-import { format } from "date-fns";
+
 import { AdmissionsTable } from "./admissions-table";
 
 export const dynamic = "force-dynamic";
