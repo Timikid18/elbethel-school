@@ -1,6 +1,7 @@
 export const SCHOOL_FACTS = {
   schoolName: "EL-BETH-EL The Kings' School",
   motto: "Fountain of Knowledge",
+  established: 2010,
   location: "No 12, Ija Road, Egan, Igando, Lagos State, Nigeria.",
   phones: ["0809 876 2044", "0903 191 7478"],
   whatsapp: "0809 876 2044",

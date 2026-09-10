@@ -4,7 +4,7 @@ import * as React from "react";
 import { useChat, type UIMessage } from "@ai-sdk/react";
 import { DefaultChatTransport } from "ai";
 import Image from "next/image";
-import { Send, X, RotateCcw } from "lucide-react";
+import { Send, X, RotateCcw, Paperclip, FileText } from "lucide-react";
 
 const SUGGESTIONS = [
   "Tell me about admissions",
@@ -35,10 +35,34 @@ function hasTools(message: UIMessage): boolean {
   return message.parts.some((p) => p.type.startsWith("tool-"));
 }
 
+type AttachedFile = {
+  name: string;
+  mimeType: string;
+  data?: string;
+};
+
+function filePartsOf(message: UIMessage): AttachedFile[] {
+  return message.parts
+    .filter((p) => p.type === "file" && "mimeType" in p)
+    .map((p) => p as AttachedFile & { type: string });
+}
+
+const MAX_FILES = 6;
+const MAX_FILE_BYTES = 6 * 1024 * 1024;
+
+function asFileList(files: File[]) {
+  if (files.length === 0) return undefined;
+  const dt = new DataTransfer();
+  for (const f of files) dt.items.add(f);
+  return dt.files;
+}
+
 export function ChatWidget() {
   const [open, setOpen] = React.useState(false);
   const [input, setInput] = React.useState("");
+  const [files, setFiles] = React.useState<File[]>([]);
   const scrollRef = React.useRef<HTMLDivElement>(null);
+  const fileInputRef = React.useRef<HTMLInputElement>(null);
 
   const {
     messages,
@@ -65,10 +89,28 @@ export function ChatWidget() {
     setMessages([WELCOME]);
   }
 
+  function onPickFiles(e: React.ChangeEvent<HTMLInputElement>) {
+    const picked = Array.from(e.target.files ?? []);
+    e.target.value = "";
+    const allowed = picked.filter((f) => f.size <= MAX_FILE_BYTES);
+    setFiles((prev) => [...prev, ...allowed].slice(0, MAX_FILES));
+  }
+
+  function removeFile(index: number) {
+    setFiles((prev) => prev.filter((_, i) => i !== index));
+  }
+
   function send(text: string) {
-    if (!text.trim()) return;
+    if (!text.trim() && files.length === 0) return;
+    const toSend = files;
     setInput("");
-    void sendMessage({ text });
+    setFiles([]);
+    const fileListArg = asFileList(toSend);
+    if (fileListArg) {
+      void sendMessage({ text, files: fileListArg });
+    } else {
+      void sendMessage({ text });
+    }
   }
 
   return (
@@ -135,7 +177,8 @@ export function ChatWidget() {
           <div ref={scrollRef} className="flex-1 space-y-3 overflow-y-auto p-4" style={{ minHeight: "280px", maxHeight: "360px" }}>
             {messages.map((m) => {
               const text = textOf(m);
-              if (!text && !hasTools(m)) return null;
+              const attached = filePartsOf(m);
+              if (!text && !hasTools(m) && attached.length === 0) return null;
               return (
                 <div
                   key={m.id}
@@ -152,6 +195,28 @@ export function ChatWidget() {
                       <span className="mb-1 block text-xs font-medium text-ash-500">
                         checked the school records
                       </span>
+                    )}
+                    {attached.length > 0 && (
+                      <div className="mb-1.5 flex flex-wrap gap-1.5">
+                        {attached.map((fp, i) =>
+                          fp.mimeType.startsWith("image/") && fp.data ? (
+                            <img
+                              key={i}
+                              src={fp.data}
+                              alt=""
+                              className="h-14 w-14 rounded-md object-cover"
+                            />
+                          ) : (
+                            <span
+                              key={i}
+                              className="flex max-w-[10rem] items-center gap-1 rounded-md bg-white/20 px-2 py-1 text-[11px]"
+                            >
+                              <FileText className="h-3 w-3 shrink-0" />
+                              <span className="truncate">{fp.name}</span>
+                            </span>
+                          ),
+                        )}
+                      </div>
                     )}
                     {text}
                   </div>
@@ -211,7 +276,50 @@ export function ChatWidget() {
             }}
             className="border-t border-border p-3"
           >
+            <input
+              ref={fileInputRef}
+              type="file"
+              accept="image/*,application/pdf"
+              multiple
+              className="hidden"
+              aria-hidden="true"
+              tabIndex={-1}
+              onChange={onPickFiles}
+            />
+            {files.length > 0 && (
+              <div className="mb-2 flex flex-wrap gap-2">
+                {files.map((f, i) => (
+                  <button
+                    key={i}
+                    type="button"
+                    onClick={() => removeFile(i)}
+                    aria-label={`Remove ${f.name}`}
+                    className="group flex items-center gap-1.5 rounded-md border border-ash-300 bg-ash-50 py-1 pl-1 pr-2 text-xs text-ink transition-colors hover:border-danger-soft hover:bg-danger-soft"
+                  >
+                    {f.type.startsWith("image/") ? (
+                      <img
+                        src={URL.createObjectURL(f)}
+                        alt=""
+                        className="h-6 w-6 rounded object-cover"
+                      />
+                    ) : (
+                      <FileText className="h-4 w-4 shrink-0 text-ash-500" />
+                    )}
+                    <span className="max-w-[7rem] truncate">{f.name}</span>
+                    <X className="h-3 w-3 shrink-0 text-ash-500 group-hover:text-danger" />
+                  </button>
+                ))}
+              </div>
+            )}
             <div className="flex items-end gap-2">
+              <button
+                type="button"
+                onClick={() => fileInputRef.current?.click()}
+                aria-label="Attach a photo or document"
+                className="flex h-10 w-10 shrink-0 items-center justify-center rounded-[var(--radius)] text-ash-500 transition-colors hover:bg-ash-200 hover:text-ink"
+              >
+                <Paperclip className="h-5 w-5" />
+              </button>
               <textarea
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
@@ -222,7 +330,9 @@ export function ChatWidget() {
                   }
                 }}
                 rows={1}
-                placeholder="Ask about the school..."
+                placeholder={
+                  files.length > 0 ? "Add a message (optional)" : "Ask about the school..."
+                }
                 aria-label="Message the assistant"
                 className="max-h-28 w-full resize-none rounded-[var(--radius)] border border-ash-400 bg-surface px-3.5 py-2.5 text-sm text-ink shadow-sm transition-colors placeholder:text-ash-500 focus:border-royal focus:outline-none focus:ring-2 focus:ring-royal-100"
               />
@@ -239,15 +349,16 @@ export function ChatWidget() {
                 <button
                   type="submit"
                   aria-label="Send message"
-                  disabled={!input.trim()}
+                  disabled={!input.trim() && files.length === 0}
                   className="flex h-10 w-10 shrink-0 items-center justify-center rounded-[var(--radius)] bg-royal text-white transition-all hover:bg-royal-600 disabled:opacity-45 disabled:pointer-events-none"
                 >
                   <Send className="h-4 w-4" />
                 </button>
               )}
             </div>
-            <p className="mt-2 text-[11px] text-ash-500">
-              AI-generated answers — confirm important details with the school office.
+            <p className="mt-2 space-x-1 text-[11px] text-ash-500">
+              <span>AI-generated answers — confirm important details with the school office.</span>
+              {files.length > 0 && <span>(max {MAX_FILES} files · 6 MB each)</span>}
             </p>
           </form>
         </aside>

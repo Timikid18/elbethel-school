@@ -18,6 +18,7 @@ export function buildSystemPrompt(role?: Role, name?: string) {
 ABOUT THE SCHOOL
 - Full name: ${SCHOOL_FACTS.schoolName}
 - Motto: "${SCHOOL_FACTS.motto}"
+- Established: ${SCHOOL_FACTS.established}
 - Address: ${SCHOOL_FACTS.location}
 - Phone / WhatsApp: ${SCHOOL_FACTS.phones.join(", ")} (WhatsApp: ${SCHOOL_FACTS.whatsapp})
 - Email: ${SCHOOL_FACTS.email}
