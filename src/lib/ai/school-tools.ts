@@ -233,6 +233,44 @@ export function buildTools(ctx: AiCtx) {
       },
     });
 
+    tools.admissionsSummary = tool({
+      description:
+        "Admissions summary for admins: total admission applications from the website, exact counts per status (SUBMITTED, UNDER_REVIEW, INTERVIEW, ACCEPTED, WAITLISTED, REJECTED, ENROLLED), plus total registered students. Use for questions like 'how many students have applied?' or 'how many have been admitted?'",
+      inputSchema: z.object({}),
+      execute: async () => {
+        const [totalApps, byStatus, totalStudents, enrolledApps] = await Promise.all([
+          prisma.admissionApplication.count(),
+          prisma.admissionApplication.groupBy({
+            by: ["status"],
+            _count: { _all: true },
+          }),
+          prisma.student.count({ where: { isArchived: false } }),
+          prisma.admissionApplication.count({ where: { status: "ENROLLED" } }),
+        ]);
+
+        const counts = new Map(byStatus.map((r) => [r.status, r._count._all]));
+        const statusLines = (
+          [
+            "SUBMITTED",
+            "UNDER_REVIEW",
+            "INTERVIEW",
+            "ACCEPTED",
+            "WAITLISTED",
+            "REJECTED",
+            "ENROLLED",
+          ] as const
+        ).map((s) => `- ${s.replace(/_/g, " ")}: ${counts.get(s) ?? 0}`);
+
+        return [
+          "Admissions summary:",
+          `- Total applications on the website: ${totalApps}`,
+          ...statusLines,
+          `- Applications converted to students (ENROLLED): ${enrolledApps}`,
+          `- Total active students registered in the school: ${totalStudents}`,
+        ].join("\n");
+      },
+    });
+
     tools.studentDetails = tool({
       description:
         "Full record for one student (find by name or admission number): profile, class, latest result and payments.",
