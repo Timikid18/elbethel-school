@@ -11,7 +11,7 @@ export const metadata: Metadata = {
     "Moments from campus life at EL-BETH-EL The Kings' School — from graduations and classrooms to sports and everyday joy.",
 };
 
-export const dynamic = "force-dynamic";
+export const revalidate = 3600;
 
 const graduands = [
   { src: "/moment.webp", alt: "A memorable moment from campus life at EL-BETH-EL The Kings' School" },
