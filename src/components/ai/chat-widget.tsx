@@ -3,7 +3,8 @@
 import * as React from "react";
 import { useChat, type UIMessage } from "@ai-sdk/react";
 import { DefaultChatTransport } from "ai";
-import { Send, X, Sparkles, RotateCcw } from "lucide-react";
+import Image from "next/image";
+import { Send, X, RotateCcw } from "lucide-react";
 
 const SUGGESTIONS = [
   "Tell me about admissions",
@@ -80,7 +81,17 @@ export function ChatWidget() {
         aria-expanded={open}
         className="fixed bottom-5 right-5 z-50 flex h-14 w-14 items-center justify-center rounded-full bg-royal text-white shadow-lg shadow-royal/30 transition-all hover:bg-royal-600 active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-royal-400"
       >
-        {open ? <X className="h-6 w-6" /> : <Sparkles className="h-6 w-6" />}
+        {open ? (
+          <X className="h-6 w-6" />
+        ) : (
+          <Image
+            src="/ebksAI.png"
+            alt=""
+            width={32}
+            height={32}
+            className="h-8 w-8 rounded-full object-cover"
+          />
+        )}
       </button>
 
       {/* Panel */}
@@ -92,8 +103,14 @@ export function ChatWidget() {
           {/* Header */}
           <header className="flex items-center justify-between gap-3 bg-royal px-4 py-3 text-white">
             <div className="flex items-center gap-2.5">
-              <span className="flex h-9 w-9 items-center justify-center rounded-full bg-white/10 text-gold">
-                <Sparkles className="h-5 w-5" />
+              <span className="flex h-9 w-9 items-center justify-center rounded-full bg-white/10">
+                <Image
+                  src="/ebksAI.png"
+                  alt=""
+                  width={24}
+                  height={24}
+                  className="h-6 w-6 rounded-full object-cover"
+                />
               </span>
               <div>
                 <p className="text-sm font-semibold leading-tight">EL-BETH-EL Assistant</p>
