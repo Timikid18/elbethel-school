@@ -79,11 +79,11 @@ export function ChatWidget() {
         onClick={() => setOpen((v) => !v)}
         aria-label={open ? "Close assistant" : "Chat with the EL-BETH-EL assistant"}
         aria-expanded={open}
-        className="ai-widget-beat fixed bottom-5 right-5 z-50 flex h-14 w-14 items-center justify-center rounded-full bg-royal text-white shadow-[0_0_24px_rgba(21,48,107,0.45)] ring-4 ring-royal/25 transition-colors hover:bg-royal-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-royal-400 active:scale-95"
+        className="ai-widget-beat fixed bottom-5 right-5 z-50 flex h-14 w-14 items-center justify-center rounded-full bg-royal text-white shadow-[0_0_24px_rgba(198,165,92,0.5)] ring-4 ring-gold/70 transition-colors hover:bg-royal-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-royal-400 active:scale-95"
       >
         <span
           aria-hidden="true"
-          className="ai-widget-halo pointer-events-none absolute inset-0 rounded-full bg-royal/50"
+          className="ai-widget-halo pointer-events-none absolute inset-0 rounded-full bg-gold/60"
         />
         {open ? (
           <X className="relative h-6 w-6" />
