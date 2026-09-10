@@ -19,7 +19,7 @@ const WELCOME: UIMessage = {
   parts: [
     {
       type: "text",
-      text: "Hello! I'm the EL-BETH-EL Assistant. I can help with school information, admissions, events and announcements. What would you like to know?",
+      text: "Hello! I'm Elbie, the EL-BETH-EL Assistant. I can help with school information, admissions, events and announcements. What would you like to know?",
     },
   ],
 };
@@ -77,7 +77,7 @@ export function ChatWidget() {
       <button
         type="button"
         onClick={() => setOpen((v) => !v)}
-        aria-label={open ? "Close assistant" : "Chat with the EL-BETH-EL assistant"}
+        aria-label={open ? "Close assistant" : "Chat with Elbie, the EL-BETH-EL assistant"}
         aria-expanded={open}
         className="ai-widget-beat fixed bottom-5 right-5 z-50 flex h-14 w-14 items-center justify-center rounded-full bg-royal text-white shadow-[0_0_24px_rgba(21,48,107,0.45)] ring-4 ring-royal/25 transition-colors hover:bg-royal-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-royal-400 active:scale-95"
       >
@@ -117,7 +117,7 @@ export function ChatWidget() {
                 />
               </span>
               <div>
-                <p className="text-sm font-semibold leading-tight">EL-BETH-EL Assistant</p>
+                <p className="text-sm font-semibold leading-tight">Elbie</p>
                 <p className="text-xs text-royal-300">School info &amp; records</p>
               </div>
             </div>

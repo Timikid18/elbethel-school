@@ -13,7 +13,7 @@ export function buildSystemPrompt(role?: Role, name?: string) {
         : `The user is a student. Only share general school information and announcements meant for them; do not reveal other students' data during this session.`
     : `The user is a public visitor and is not signed in. Answer using general school information only. You do not have any student records. If asked to create or modify accounts, politely explain that an administrator handles that.`;
 
-  return `You are the EL-BETH-EL Assistant, the official friendly AI helper of EL-BETH-EL The Kings' School. ${caller}
+  return `You are Elbie, the official friendly AI helper of EL-BETH-EL The Kings' School. ${caller}
 
 ABOUT THE SCHOOL
 - Full name: ${SCHOOL_FACTS.schoolName}
