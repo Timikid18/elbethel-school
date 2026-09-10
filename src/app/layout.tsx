@@ -6,6 +6,7 @@ import { PageLoadOverlay } from "@/components/ui/page-load-overlay";
 import { ThemeProvider } from "@/components/theme/theme-provider";
 import { ChatWidget } from "@/components/ai/chat-widget";
 import { PromoCard } from "@/components/ui/promo-card";
+import { ServiceWorkerRegister } from "@/components/ui/service-worker-register";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -67,6 +68,7 @@ export default function RootLayout({
           <PageLoadOverlay />
           <ChatWidget />
           <PromoCard />
+          <ServiceWorkerRegister />
         </ThemeProvider>
       </body>
     </html>
