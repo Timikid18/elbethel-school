@@ -11,12 +11,12 @@ export function Testimonials() {
           eyebrow="Testimonials"
           title="What our families say"
         />
-        <div className="mt-14 grid gap-6 md:grid-cols-3">
+        <div className="mt-14 flex snap-x snap-mandatory gap-6 overflow-x-auto overscroll-x-contain pb-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden md:grid md:grid-cols-3 md:gap-6 md:overflow-visible md:pb-0">
           {testimonials.map((t, i) => (
             <Reveal
               key={t.name}
               delay={i * 80}
-              className="group relative flex flex-col overflow-hidden rounded-[var(--radius-md)] border border-border bg-surface p-8 shadow-sm transition-all duration-200 hover:-translate-y-1 hover:border-royal-300 hover:shadow-[var(--shadow-md)]"
+              className="group relative flex min-w-[82%] shrink-0 snap-start flex-col overflow-hidden rounded-[var(--radius-md)] border border-border bg-surface p-8 shadow-sm transition-all duration-200 hover:-translate-y-1 hover:border-royal-300 hover:shadow-[var(--shadow-md)] sm:min-w-[60%] md:min-w-0"
             >
               <span
                 className="absolute inset-x-0 top-0 h-[3px] origin-left scale-x-0 bg-gradient-to-r from-royal via-gold to-royal transition-transform duration-300 group-hover:scale-x-100"
