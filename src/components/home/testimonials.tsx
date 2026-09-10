@@ -16,7 +16,7 @@ export function Testimonials() {
             <Reveal
               key={t.name}
               delay={i * 80}
-              className="group relative flex min-w-[62%] shrink-0 snap-start flex-col overflow-hidden rounded-[var(--radius-md)] border border-border bg-surface p-5 shadow-sm transition-all duration-200 hover:-translate-y-1 hover:border-royal-300 hover:shadow-[var(--shadow-md)] sm:min-w-[50%] sm:p-6 md:min-w-0 md:p-8"
+              className="group relative flex aspect-square w-[68%] shrink-0 snap-start flex-col overflow-hidden rounded-[var(--radius-md)] border border-border bg-surface p-5 shadow-sm transition-all duration-200 hover:-translate-y-1 hover:border-royal-300 hover:shadow-[var(--shadow-md)] sm:w-[52%] sm:p-6 md:aspect-auto md:w-auto md:min-w-0 md:p-8"
             >
               <span
                 className="absolute inset-x-0 top-0 h-[3px] origin-left scale-x-0 bg-gradient-to-r from-royal via-gold to-royal transition-transform duration-300 group-hover:scale-x-100"
