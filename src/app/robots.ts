@@ -1,4 +1,5 @@
 import type { MetadataRoute } from "next";
+import { SITE } from "@/lib/site";
 
 export default function robots(): MetadataRoute.Robots {
   return {
@@ -6,9 +7,18 @@ export default function robots(): MetadataRoute.Robots {
       {
         userAgent: "*",
         allow: "/",
-        disallow: ["/dashboard", "/admin", "/teacher", "/parent", "/student", "/super-admin"],
+        disallow: [
+          "/login",
+          "/api",
+          "/dashboard",
+          "/admin",
+          "/teacher",
+          "/parent",
+          "/student",
+          "/super-admin",
+        ],
       },
     ],
-    sitemap: "https://elbethelthekings.xyz/sitemap.xml",
+    sitemap: `${SITE.url}/sitemap.xml`,
   };
 }

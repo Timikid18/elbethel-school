@@ -13,11 +13,16 @@ import {
 } from "lucide-react";
 import { PageHeader } from "@/components/public/page-header";
 import { Reveal } from "@/components/ui/reveal";
+import { JsonLd, PageStructuredData } from "@/components/seo/json-ld";
+import { faqSchema } from "@/lib/seo/schema";
 
 export const metadata: Metadata = {
   title: "Admissions",
   description:
-    "Begin your child's journey at EL-BETH-EL The Kings' School. Learn about admission requirements, the application process and important dates, then apply online.",
+    "Apply to EL-BETH-EL The Kings' School, Igando, Lagos. Learn about admission requirements, the application process and important dates, then apply online.",
+  alternates: {
+    canonical: "/admissions",
+  },
 };
 
 const processSteps = [
@@ -56,6 +61,13 @@ const faqs = [
 export default function AdmissionsPage() {
   return (
     <div>
+      <PageStructuredData
+        path="/admissions"
+        name="Admissions"
+        description="Admission requirements, the application process and important dates at EL-BETH-EL The Kings' School, Igando, Lagos."
+        breadcrumb={[{ name: "Home", path: "/" }, { name: "Admissions" }]}
+      />
+      <JsonLd data={faqSchema(faqs)} />
       <PageHeader
         eyebrow="Admissions"
         title="Begin your child's journey with us"

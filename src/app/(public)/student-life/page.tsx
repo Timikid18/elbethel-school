@@ -14,11 +14,15 @@ import {
 } from "lucide-react";
 import { PageHeader } from "@/components/public/page-header";
 import { Reveal } from "@/components/ui/reveal";
+import { PageStructuredData } from "@/components/seo/json-ld";
 
 export const metadata: Metadata = {
   title: "Student Life",
   description:
     "Clubs, sports, houses, trips and the wider activities that make life at EL-BETH-EL The Kings' School vibrant and memorable.",
+  alternates: {
+    canonical: "/student-life",
+  },
 };
 
 const clubs = [
@@ -49,6 +53,12 @@ const galleryItems = [
 export default function StudentLifePage() {
   return (
     <div>
+      <PageStructuredData
+        path="/student-life"
+        name="Student Life"
+        description="Clubs, sports, houses, trips and activities at EL-BETH-EL The Kings' School."
+        breadcrumb={[{ name: "Home", path: "/" }, { name: "Student Life" }]}
+      />
       <PageHeader
         eyebrow="Student Life"
         title="More than lessons — a vibrant community"

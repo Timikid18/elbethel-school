@@ -3,11 +3,15 @@ import { MapPin, Phone, Mail, Clock, MessageCircle } from "lucide-react";
 import { PageHeader } from "@/components/public/page-header";
 import { Reveal } from "@/components/ui/reveal";
 import { ContactForm } from "@/components/contact/contact-form";
+import { PageStructuredData } from "@/components/seo/json-ld";
 
 export const metadata: Metadata = {
   title: "Contact Us",
   description:
-    "Get in touch with EL-BETH-EL The Kings' School. Visit us, call, email or send a message — we would love to hear from you.",
+    "Contact EL-BETH-EL The Kings' School at No 12, Ija Road, Egan, Igando, Lagos State, Nigeria. Call, email or send a message — we would love to hear from you.",
+  alternates: {
+    canonical: "/contact",
+  },
 };
 
 const officeHours = [
@@ -37,6 +41,12 @@ const channels = [
 export default function ContactPage() {
   return (
     <div>
+      <PageStructuredData
+        path="/contact"
+        name="Contact Us"
+        description="Contact EL-BETH-EL The Kings' School — No 12, Ija Road, Egan, Igando, Lagos State, Nigeria."
+        breadcrumb={[{ name: "Home", path: "/" }, { name: "Contact" }]}
+      />
       <PageHeader
         eyebrow="Contact"
         title="We would love to hear from you"

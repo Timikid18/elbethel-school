@@ -11,6 +11,10 @@ import { ArrowLeft, GraduationCap, ShieldCheck, Users } from "lucide-react";
 export const metadata: Metadata = {
   title: "Sign in",
   description: "Sign in to the EL-BETH-EL The Kings' School portal.",
+  robots: {
+    index: false,
+    follow: false,
+  },
 };
 
 export default async function LoginPage() {

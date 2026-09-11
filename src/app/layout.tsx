@@ -7,6 +7,9 @@ import { ThemeProvider } from "@/components/theme/theme-provider";
 import { ChatWidget } from "@/components/ai/chat-widget";
 import { PromoCard } from "@/components/ui/promo-card";
 import { ServiceWorkerRegister } from "@/components/ui/service-worker-register";
+import { JsonLd } from "@/components/seo/json-ld";
+import { schoolSchema } from "@/lib/seo/schema";
+import { SITE } from "@/lib/site";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -23,31 +26,46 @@ const playfair = Playfair_Display({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(SITE.url),
   title: {
-    default: "EL-BETH-EL The Kings' School — Fountain of Knowledge",
-    template: "%s | EL-BETH-EL The Kings' School",
+    default: SITE.name,
+    template: `%s | ${SITE.name}`,
   },
-  description:
-    "EL-BETH-EL The Kings' School — Fountain of Knowledge. A place where knowledge meets character, excellence meets opportunity, and every child is prepared for a brighter future.",
-  keywords: [
-    "EL-BETH-EL",
-    "Kings School",
-    "school",
-    "education",
-    "academics",
-    "admissions",
-    "Fountain of Knowledge",
-  ],
+  description: SITE.description,
+  applicationName: SITE.name,
+  keywords: [...SITE.keywords],
+  alternates: {
+    canonical: "/",
+  },
   openGraph: {
-    title: "EL-BETH-EL The Kings' School",
-    description:
-      "Fountain of Knowledge. Where knowledge meets character, excellence meets opportunity.",
     type: "website",
-    siteName: "EL-BETH-EL The Kings' School",
+    locale: "en_NG",
+    url: SITE.url,
+    siteName: SITE.name,
+    title: `${SITE.name} | ${SITE.motto}`,
+    description: SITE.description,
+    images: [
+      {
+        url: SITE.ogImage.path,
+        width: SITE.ogImage.width,
+        height: SITE.ogImage.height,
+        alt: SITE.ogImage.alt,
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: `${SITE.name} | ${SITE.motto}`,
+    description: SITE.description,
+    images: [SITE.ogImage.path],
   },
   robots: {
     index: true,
     follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+    },
   },
 };
 
@@ -63,6 +81,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning className={`${inter.variable} ${playfair.variable} antialiased`}>
       <body suppressHydrationWarning className="min-h-screen bg-surface text-ink font-sans">
+        <JsonLd data={schoolSchema()} />
         <ThemeProvider>
           <ToastProvider>{children}</ToastProvider>
           <PageLoadOverlay />

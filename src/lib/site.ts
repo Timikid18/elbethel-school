@@ -1,0 +1,55 @@
+export const SITE = {
+  name: "EL-BETH-EL The Kings' School",
+  alternateName: "EBKS",
+  motto: "Fountain of Knowledge",
+  tagline:
+    "A place where knowledge meets character, excellence meets opportunity, and every child is prepared for a brighter future.",
+  description:
+    "EL-BETH-EL The Kings' School is a nursery, primary and secondary school in Egan, Igando, Lagos State, Nigeria. Established in 2010, with the motto 'Fountain of Knowledge', the school offers Early Years, Primary and Secondary education in a whole-child environment of academic and moral excellence. This is the official school website.",
+  url: "https://elbethelthekings.xyz",
+  domain: "elbethelthekings.xyz",
+  established: 2010,
+  email: "admin@elbethelthekings.xyz",
+  phones: [
+    { display: "0809 876 2044", tel: "+2348098762044" },
+    { display: "0903 191 7478", tel: "+2349031917478" },
+  ],
+  whatsapp: "+2348098762044",
+  address: {
+    streetAddress: "No 12, Ija Road, Egan, Igando",
+    addressLocality: "Igando",
+    addressRegion: "Lagos State",
+    country: "NG",
+    full: "No 12, Ija Road, Egan, Igando, Lagos State, Nigeria",
+  },
+  officeHours: [
+    { days: "Monday - Friday", opens: "07:30", closes: "16:00" },
+    { days: "Saturday", opens: "09:00", closes: "13:00" },
+  ],
+  logo: "/logo.webp",
+  image: "/hero.webp",
+  ogImage: {
+    path: "/hero.webp",
+    width: 1536,
+    height: 1024,
+    alt: "Students and campus at EL-BETH-EL The Kings' School",
+  },
+  divisions: [
+    "Early Years: Nursery 1, Nursery 2, KG 1, KG 2",
+    "Primary: Grade 1 through Grade 6",
+    "Secondary: JSS 1 - JSS 3, SSS 1 - SSS 3",
+  ],
+  keywords: [
+    "EL-BETH-EL The Kings' School",
+    "EBKS",
+    "EBKS Lagos",
+    "EL-BETH-EL School",
+    "El-Beth-El Igando",
+    "school in Igando",
+    "school in Egan Lagos",
+    "nursery and primary school Lagos",
+    "secondary school Igando",
+    "private school Lagos State",
+    "admissions Lagos school",
+  ],
+} as const;

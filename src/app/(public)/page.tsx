@@ -10,18 +10,26 @@ import { Testimonials } from "@/components/home/testimonials";
 import { NewsEvents } from "@/components/home/news-events";
 import { AdmissionsCTA } from "@/components/home/admissions-cta";
 import { StatsStrip } from "@/components/home/stats-strip";
+import { JsonLd } from "@/components/seo/json-ld";
+import { websiteSchema } from "@/lib/seo/schema";
+import { SITE } from "@/lib/site";
 
 export const revalidate = 3600;
 
 export const metadata: Metadata = {
-  title: "EL-BETH-EL The Kings' School | Fountain of Knowledge",
-  description:
-    "EL-BETH-EL The Kings' School — Fountain of Knowledge. A place where knowledge meets character, excellence meets opportunity, and every child is prepared for a brighter future. Apply now.",
+  title: {
+    absolute: `${SITE.name} | ${SITE.motto}`,
+  },
+  description: SITE.description,
+  alternates: {
+    canonical: "/",
+  },
 };
 
 export default function HomePage() {
   return (
     <div>
+      <JsonLd data={websiteSchema()} />
       <Hero />
       <Marquee />
       <Welcome />

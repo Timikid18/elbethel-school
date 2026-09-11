@@ -3,12 +3,16 @@ import Image from "next/image";
 import { GraduationCap, Images } from "lucide-react";
 import { PageHeader } from "@/components/public/page-header";
 import { Reveal } from "@/components/ui/reveal";
+import { PageStructuredData } from "@/components/seo/json-ld";
 import { prisma } from "@/lib/prisma";
 
 export const metadata: Metadata = {
   title: "Gallery",
   description:
     "Moments from campus life at EL-BETH-EL The Kings' School — from graduations and classrooms to sports and everyday joy.",
+  alternates: {
+    canonical: "/gallery",
+  },
 };
 
 export const revalidate = 3600;
@@ -38,6 +42,12 @@ const hasUploaded = uploaded.length > 0;
 export default function GalleryPage() {
   return (
     <div>
+      <PageStructuredData
+        path="/gallery"
+        name="Gallery"
+        description="Photos from campus life at EL-BETH-EL The Kings' School — graduations, classrooms, sports and everyday moments."
+        breadcrumb={[{ name: "Home", path: "/" }, { name: "Gallery" }]}
+      />
       <PageHeader
         eyebrow="Gallery"
         title="Moments from campus"

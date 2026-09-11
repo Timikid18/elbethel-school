@@ -4,12 +4,16 @@ import { CalendarDays, Megaphone, ArrowRight } from "lucide-react";
 import { PageHeader } from "@/components/public/page-header";
 import { Reveal } from "@/components/ui/reveal";
 import { Badge } from "@/components/ui/badge";
+import { PageStructuredData } from "@/components/seo/json-ld";
 import { prisma } from "@/lib/prisma";
 
 export const metadata: Metadata = {
   title: "News & Events",
   description:
-    "Announcements, school news and upcoming events from EL-BETH-EL The Kings' School.",
+    "Announcements, school news and upcoming events from EL-BETH-EL The Kings' School, Igando, Lagos.",
+  alternates: {
+    canonical: "/news",
+  },
 };
 
 export const revalidate = 3600;
@@ -92,6 +96,12 @@ export default async function NewsPage() {
 
   return (
     <div>
+      <PageStructuredData
+        path="/news"
+        name="News & Events"
+        description="Announcements, school news and upcoming events from EL-BETH-EL The Kings' School."
+        breadcrumb={[{ name: "Home", path: "/" }, { name: "News & Events" }]}
+      />
       <PageHeader
         eyebrow="News & Events"
         title="Stay connected with our community"

@@ -12,11 +12,15 @@ import {
 } from "lucide-react";
 import { PageHeader } from "@/components/public/page-header";
 import { Reveal } from "@/components/ui/reveal";
+import { PageStructuredData } from "@/components/seo/json-ld";
 
 export const metadata: Metadata = {
   title: "About Us",
   description:
-    "Learn about EL-BETH-EL The Kings' School — our story, vision, mission, values and educational philosophy.",
+    "The official story of EL-BETH-EL The Kings' School, Egan, Igando, Lagos State — established in 2010. Learn about our vision, mission, values and educational philosophy.",
+  alternates: {
+    canonical: "/about",
+  },
 };
 
 const values = [
@@ -36,6 +40,12 @@ const stats = [
 export default function AboutPage() {
   return (
     <div>
+      <PageStructuredData
+        path="/about"
+        name="About Us"
+        description="The official story of EL-BETH-EL The Kings' School, Egan, Igando, Lagos State — established in 2010. Our vision, mission, values and educational philosophy."
+        breadcrumb={[{ name: "Home", path: "/" }, { name: "About Us" }]}
+      />
       <PageHeader
         eyebrow="About the School"
         title="A school with a story, a vision and a purpose"

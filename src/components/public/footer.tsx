@@ -33,6 +33,7 @@ function BrandIcon({ name }: { name: string }) {
 
 const explore = [
   { label: "About Us", href: "/about" },
+  { label: "School Information", href: "/school-information" },
   { label: "Academics", href: "/academics" },
   { label: "Admissions", href: "/admissions" },
   { label: "Student Life", href: "/student-life" },
@@ -152,7 +153,7 @@ export function PublicFooter() {
           <ul className="mt-4 space-y-3 text-sm text-royal-300">
             <li className="flex gap-2.5">
               <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-gold" />
-              <span>No 12, Ija Road, Egan, Igando, Lagos</span>
+              <span>No 12, Ija Road, Egan, Igando, Lagos State, Nigeria</span>
             </li>
             <li className="flex gap-2.5">
               <Phone className="mt-0.5 h-4 w-4 shrink-0 text-gold" />

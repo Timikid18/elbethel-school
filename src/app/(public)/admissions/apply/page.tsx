@@ -2,16 +2,30 @@ import type { Metadata } from "next";
 import { ApplicationForm } from "@/components/admissions/application-form";
 import { PageHeader } from "@/components/public/page-header";
 import { Reveal } from "@/components/ui/reveal";
+import { PageStructuredData } from "@/components/seo/json-ld";
 
 export const metadata: Metadata = {
   title: "Apply Now",
   description:
-    "Submit an admission application for EL-BETH-EL The Kings' School. Complete the online form to begin your child's journey with us.",
+    "Submit an admission application for EL-BETH-EL The Kings' School, Igando, Lagos. Complete the online form to begin your child's journey with us.",
+  alternates: {
+    canonical: "/admissions/apply",
+  },
 };
 
 export default function ApplyPage() {
   return (
     <div>
+      <PageStructuredData
+        path="/admissions/apply"
+        name="Apply Now"
+        description="Online admission application form for EL-BETH-EL The Kings' School, Igando, Lagos."
+        breadcrumb={[
+          { name: "Home", path: "/" },
+          { name: "Admissions", path: "/admissions" },
+          { name: "Apply" },
+        ]}
+      />
       <PageHeader
         eyebrow="Admissions"
         title="Apply for admission"

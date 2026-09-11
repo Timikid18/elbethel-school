@@ -12,11 +12,15 @@ import {
 import { PageHeader } from "@/components/public/page-header";
 import { Reveal } from "@/components/ui/reveal";
 import { divisions } from "@/lib/divisions";
+import { PageStructuredData } from "@/components/seo/json-ld";
 
 export const metadata: Metadata = {
   title: "Academics",
   description:
-    "Explore the academic philosophy, curriculum, departments and learning approach at EL-BETH-EL The Kings' School.",
+    "Explore academics at EL-BETH-EL The Kings' School, Igando, Lagos — our Early Years, Primary and Secondary curriculum, departments, assessment and academic calendar.",
+  alternates: {
+    canonical: "/academics",
+  },
 };
 
 const departments = [
@@ -38,6 +42,12 @@ const assessment = [
 export default function AcademicsPage() {
   return (
     <div>
+      <PageStructuredData
+        path="/academics"
+        name="Academics"
+        description="Early Years, Primary and Secondary education at EL-BETH-EL The Kings' School — curriculum, departments, assessment and academic calendar."
+        breadcrumb={[{ name: "Home", path: "/" }, { name: "Academics" }]}
+      />
       <PageHeader
         eyebrow="Academics"
         title="An education that prepares students for life"
