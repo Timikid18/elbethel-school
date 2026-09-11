@@ -21,6 +21,7 @@ export const metadata: Metadata = {
     absolute: `${SITE.name} | ${SITE.motto}`,
   },
   description: SITE.description,
+  creator: SITE.name,
   alternates: {
     canonical: "/",
   },
