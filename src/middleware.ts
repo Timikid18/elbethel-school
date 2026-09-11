@@ -30,5 +30,8 @@ export function middleware(req: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/((?!_next/static|_next/image|favicon.ico|icon\\.png|logobg\\.jpg|logo\\..+).*)"],
+  // Run middleware only on dotless app routes. Skipped: sitemap.xml, robots.txt,
+  // manifest.webmanifest, sw.js and all static assets (_next/static, images, etc.)
+  // so crawlers always hit the plain CDN-served files.
+  matcher: ["/((?!_next/static|_next/image|.*\\..*).*)"],
 };
