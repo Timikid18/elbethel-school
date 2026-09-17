@@ -8,6 +8,7 @@ import {
   ClipboardCheck,
   Megaphone,
   Image,
+  BookOpen,
   ArrowRight,
 } from "lucide-react";
 
@@ -18,6 +19,7 @@ const QUICK_LINKS = [
   { href: "/admin/approvals", label: "Approvals", icon: ClipboardCheck, description: "Review teacher change requests" },
   { href: "/admin/announcements", label: "Announcements", icon: Megaphone, description: "Post school-wide news" },
   { href: "/admin/gallery", label: "Gallery", icon: Image, description: "Upload campus photos" },
+  { href: "/admin/lesson-notes", label: "Lesson notes", icon: BookOpen, description: "Manage class lesson-note PDFs" },
 ];
 
 export default async function AdminDashboardPage() {

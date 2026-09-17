@@ -18,6 +18,7 @@ import {
   Megaphone,
   Image,
   GraduationCap,
+  BookOpen,
 } from "lucide-react";
 
 export function PortalShell({
@@ -43,6 +44,7 @@ export function PortalShell({
           { href: "/admin/approvals", label: "Approvals", icon: ClipboardCheck, active: pathname.startsWith("/admin/approvals") },
           { href: "/admin/announcements", label: "Announcements", icon: Megaphone, active: pathname.startsWith("/admin/announcements") },
           { href: "/admin/gallery", label: "Gallery", icon: Image, active: pathname.startsWith("/admin/gallery") },
+          { href: "/admin/lesson-notes", label: "Lesson notes", icon: BookOpen, active: pathname.startsWith("/admin/lesson-notes") },
           { href: "/admin/admissions", label: "Admissions", icon: Inbox, active: pathname.startsWith("/admin/admissions") },
           { href: "/admin/contact", label: "Contact messages", icon: MessageSquare, active: pathname.startsWith("/admin/contact") },
         ]
@@ -51,6 +53,7 @@ export function PortalShell({
       ? [
           { href: "/teacher/students", label: "My students", icon: GraduationCap, active: pathname.startsWith("/teacher/students") },
           { href: "/teacher/announcements", label: "Class announcements", icon: Megaphone, active: pathname.startsWith("/teacher/announcements") },
+          { href: "/teacher/lesson-notes", label: "Lesson notes", icon: BookOpen, active: pathname.startsWith("/teacher/lesson-notes") },
         ]
       : []),
   ];

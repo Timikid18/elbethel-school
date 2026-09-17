@@ -122,6 +122,7 @@ model User {
 
   notifications UserNotification[]
   auditLogs     AuditLog[]
+  lessonNotes   LessonNote[]
 
   changeRequests        ChangeRequest[] @relation("ChangeRequestRequester")
   reviewedChangeRequests ChangeRequest[] @relation("ChangeRequestReviewer")
@@ -578,6 +579,28 @@ model GalleryImage {
   isPublished Boolean  @default(true)
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
+}
+
+// ============ LESSON NOTES (private, portal-only) ============
+
+model LessonNote {
+  id           String   @id @default(cuid())
+  className    String
+  division     String // EarlyYears | Primary | Secondary
+  subject      String
+  title        String
+  fileName     String
+  contentType  String   @default("application/pdf")
+  fileSize     Int?
+  fileData     Bytes
+  uploadedById String?
+  uploadedBy   User?    @relation(fields: [uploadedById], references: [id])
+  isActive     Boolean  @default(true)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  @@index([className, isActive])
+  @@index([division, isActive])
 }
 
 // ============ SECURITY / AUDIT ============
