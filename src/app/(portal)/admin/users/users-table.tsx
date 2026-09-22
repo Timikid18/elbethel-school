@@ -14,6 +14,7 @@ import {
   Wand2,
   GraduationCap,
   Check,
+  Pencil,
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -74,6 +75,8 @@ export function UsersTable({
   const [resetUser, setResetUser] = React.useState<UserRow | null>(null);
   const [confirmDelete, setConfirmDelete] = React.useState<UserRow | null>(null);
   const [classTeacher, setClassTeacher] = React.useState<UserRow | null>(null);
+  const [editUser, setEditUser] = React.useState<UserRow | null>(null);
+  const [editForm, setEditForm] = React.useState({ fullName: "", email: "", phone: "", role: "STUDENT" });
   const [busy, setBusy] = React.useState(false);
   const [error, setError] = React.useState("");
 
@@ -206,6 +209,45 @@ export function UsersTable({
     );
   }
 
+  function openEdit(user: UserRow) {
+    setError("");
+    setEditUser(user);
+    setEditForm({
+      fullName: user.fullName,
+      email: user.email,
+      phone: user.phone ?? "",
+      role: user.role,
+    });
+  }
+
+  async function onSaveEdit(e: React.FormEvent) {
+    e.preventDefault();
+    if (!editUser) return;
+    setBusy(true);
+    setError("");
+    try {
+      const res = await fetch(`/api/admin/users/${editUser.id}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          fullName: editForm.fullName,
+          email: editForm.email,
+          phone: editForm.phone,
+          role: editForm.role,
+        }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error ?? "Update failed");
+      toast({ type: "success", title: "Details updated", message: editForm.fullName });
+      setEditUser(null);
+      router.refresh();
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Could not update the account");
+    } finally {
+      setBusy(false);
+    }
+  }
+
   async function onSaveClasses() {
     if (!classTeacher) return;
     setBusy(true);
@@ -293,6 +335,15 @@ export function UsersTable({
                   </td>
                   <td className="py-3 align-top">
                     <div className="flex items-center gap-1">
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        aria-label="Edit details"
+                        disabled={busy}
+                        onClick={() => openEdit(user)}
+                      >
+                        <Pencil className="h-4 w-4" />
+                      </Button>
                       <Button
                         variant="ghost"
                         size="icon"
@@ -597,6 +648,84 @@ export function UsersTable({
             })
           )}
         </div>
+      </Modal>
+
+      {/* Edit details modal */}
+      <Modal
+        open={!!editUser}
+        onClose={() => setEditUser(null)}
+        title={editUser ? `Edit details — ${editUser.fullName}` : "Edit details"}
+        description="Update the account's name, email, phone or role."
+        hideClose={busy}
+        footer={
+          <>
+            <Button variant="outline" onClick={() => setEditUser(null)} disabled={busy}>
+              Cancel
+            </Button>
+            <Button type="submit" form="edit-user-form" loading={busy}>
+              Save changes
+            </Button>
+          </>
+        }
+      >
+        {editUser && (
+          <form id="edit-user-form" onSubmit={onSaveEdit} className="space-y-4">
+            {error && (
+              <div role="alert" className="rounded-[var(--radius)] border border-danger bg-danger-soft px-4 py-3 text-sm text-danger">
+                {error}
+              </div>
+            )}
+            <Field label="Full name" required htmlFor="ed-fullName">
+              <Input
+                id="ed-fullName"
+                autoFocus
+                required
+                value={editForm.fullName}
+                onChange={(e) => setEditForm((prev) => ({ ...prev, fullName: e.target.value }))}
+              />
+            </Field>
+            <Field label="Email" required htmlFor="ed-email" hint="The user signs in with this address.">
+              <Input
+                id="ed-email"
+                type="email"
+                required
+                value={editForm.email}
+                onChange={(e) => setEditForm((prev) => ({ ...prev, email: e.target.value }))}
+              />
+            </Field>
+            <div className="grid gap-4 sm:grid-cols-2">
+              <Field label="Phone" htmlFor="ed-phone">
+                <Input
+                  id="ed-phone"
+                  value={editForm.phone}
+                  onChange={(e) => setEditForm((prev) => ({ ...prev, phone: e.target.value }))}
+                  placeholder="+234..."
+                />
+              </Field>
+              <Field
+                label="Role"
+                required
+                htmlFor="ed-role"
+                hint={editUser.id === currentUserId ? "You cannot change your own role." : undefined}
+              >
+                <Select
+                  id="ed-role"
+                  value={editForm.role}
+                  disabled={editUser.id === currentUserId}
+                  onChange={(e) => setEditForm((prev) => ({ ...prev, role: e.target.value }))}
+                >
+                  <option value="STUDENT">Student</option>
+                  <option value="PARENT">Parent</option>
+                  <option value="TEACHER">Teacher</option>
+                  <option value="ADMIN">Admin</option>
+                  {currentRole === "SUPER_ADMIN" && (
+                    <option value="SUPER_ADMIN">Super Admin</option>
+                  )}
+                </Select>
+              </Field>
+            </div>
+          </form>
+        )}
       </Modal>
 
       <ConfirmationDialog

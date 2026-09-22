@@ -128,6 +128,60 @@ export async function isLastSuperAdmin(userId: string) {
   return count <= 1;
 }
 
+/** Create the role profile (Teacher/Parent/Student) for a user account, if missing. */
+export async function ensureRoleProfile(userId: string, role: Role) {
+  const user = await prisma.user.findUnique({ where: { id: userId } });
+  if (!user) return;
+  const [firstName, ...rest] = user.fullName.trim().split(/\s+/);
+  const lastName = rest.join(" ") || firstName;
+
+  if (role === "TEACHER") {
+    const exists = await prisma.teacher.findUnique({ where: { userId }, select: { id: true } });
+    if (!exists) {
+      await prisma.teacher.create({
+        data: {
+          userId,
+          firstName,
+          lastName,
+          email: user.email,
+          phone: user.phone,
+          staffId: randomCode("STF"),
+        },
+      });
+    }
+  } else if (role === "PARENT") {
+    const exists = await prisma.parentProfile.findUnique({ where: { userId }, select: { id: true } });
+    if (!exists) {
+      await prisma.parentProfile.create({
+        data: { userId, firstName, lastName, email: user.email, phone: user.phone },
+      });
+    }
+  } else if (role === "STUDENT") {
+    const exists = await prisma.student.findUnique({ where: { userId }, select: { id: true } });
+    if (!exists) {
+      await prisma.student.create({
+        data: {
+          userId,
+          firstName,
+          lastName,
+          gender: "N/A",
+          admissionNumber: randomCode("ADM"),
+        },
+      });
+    }
+  }
+}
+
+/** Keep a user's Teacher/Parent profile email in sync with the account email. */
+export async function syncProfileEmail(userId: string, email: string) {
+  const [teacher, parent] = await Promise.all([
+    prisma.teacher.findUnique({ where: { userId }, select: { id: true } }),
+    prisma.parentProfile.findUnique({ where: { userId }, select: { id: true } }),
+  ]);
+  if (teacher) await prisma.teacher.update({ where: { id: teacher.id }, data: { email } });
+  if (parent) await prisma.parentProfile.update({ where: { id: parent.id }, data: { email } });
+}
+
 /** Assign (or reassign) which class(es) a teacher is form teacher for. */
 export async function setTeacherClasses(teacherId: string, classIds: string[]) {
   await prisma.$transaction(async (tx) => {

@@ -7,6 +7,8 @@ import {
   deleteUserAccount,
   isLastSuperAdmin,
   setTeacherClasses,
+  ensureRoleProfile,
+  syncProfileEmail,
   ROLES,
 } from "@/lib/users";
 import { writeAudit } from "@/lib/moderation";
@@ -35,6 +37,20 @@ export async function PATCH(request: Request, { params }: RouteContext) {
 
     if (body.fullName !== undefined) data.fullName = String(body.fullName).trim() || target.fullName;
     if (body.phone !== undefined) data.phone = String(body.phone).trim() || null;
+
+    if (body.email !== undefined) {
+      const email = String(body.email).trim().toLowerCase();
+      if (!/^\S+@\S+\.\S+$/.test(email)) {
+        return NextResponse.json({ error: "A valid email is required" }, { status: 400 });
+      }
+      if (email !== target.email) {
+        const clash = await prisma.user.findUnique({ where: { email }, select: { id: true } });
+        if (clash && clash.id !== id) {
+          return NextResponse.json({ error: "An account with that email already exists" }, { status: 400 });
+        }
+        data.email = email;
+      }
+    }
 
     if (body.status !== undefined) {
       if (!STATUSES.includes(body.status)) {
@@ -75,6 +91,15 @@ export async function PATCH(request: Request, { params }: RouteContext) {
     let updated = target;
     if (Object.keys(data).length > 0) {
       updated = await prisma.user.update({ where: { id }, data });
+    }
+
+    // Keep the matching role profile in place when the role changes.
+    if (body.role !== undefined && body.role !== target.role) {
+      await ensureRoleProfile(id, body.role);
+    }
+    // Keep Teacher/Parent profile emails aligned with the account email.
+    if (body.email !== undefined && updated.email !== target.email) {
+      await syncProfileEmail(id, updated.email);
     }
 
     // Reassign form classes for a teacher account.
