@@ -417,6 +417,30 @@ html.dark .lift-card {
   .marquee-track { animation: none; }
 }
 
+/* ---------- Floating school icons ---------- */
+@keyframes float-sway {
+  0%, 100% {
+    transform: translate3d(0, 0, 0) rotate(var(--float-base-rot, 0deg));
+  }
+  50% {
+    transform: translate3d(
+        var(--float-drift-x, 8px),
+        var(--float-drift-y, -16px),
+        0
+      )
+      rotate(calc(var(--float-base-rot, 0deg) + var(--float-tilt, 7deg)));
+  }
+}
+.float-sway {
+  display: inline-flex;
+  will-change: transform;
+  animation: float-sway var(--float-duration, 6s) ease-in-out infinite;
+  animation-delay: var(--float-delay, 0s);
+}
+@media (prefers-reduced-motion: reduce) {
+  .float-sway { animation: none; }
+}
+
 /* ---------- AI assistant widget ---------- */
 @keyframes ai-widget-halo {
   0% {

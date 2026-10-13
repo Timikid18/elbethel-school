@@ -15,6 +15,8 @@ import {
   GraduationCap,
   Check,
   Pencil,
+  Search,
+  X,
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -90,6 +92,32 @@ export function UsersTable({
     showPassword: true,
   });
   const [resetPassword, setResetPassword] = React.useState(generatePassword());
+
+  const [query, setQuery] = React.useState("");
+  const [roleFilter, setRoleFilter] = React.useState("ALL");
+  const [statusFilter, setStatusFilter] = React.useState("ALL");
+
+  // Match every whitespace-separated term against name, email or phone so that a
+  // full name like "Ruth Julius" finds first- and last-name matches alike.
+  const filteredUsers = React.useMemo(() => {
+    const terms = query.toLowerCase().split(/\s+/).filter(Boolean);
+    return users.filter((u) => {
+      if (roleFilter !== "ALL" && u.role !== roleFilter) return false;
+      if (statusFilter !== "ALL" && u.status !== statusFilter) return false;
+      if (terms.length === 0) return true;
+      const haystack = `${u.fullName} ${u.email} ${u.phone ?? ""}`.toLowerCase();
+      return terms.every((term) => haystack.includes(term));
+    });
+  }, [users, query, roleFilter, statusFilter]);
+
+  const hasActiveFilters =
+    query.trim() !== "" || roleFilter !== "ALL" || statusFilter !== "ALL";
+
+  function clearFilters() {
+    setQuery("");
+    setRoleFilter("ALL");
+    setStatusFilter("ALL");
+  }
 
   function setForm<K extends keyof typeof newUser>(key: K, value: (typeof newUser)[K]) {
     setNewUser((prev) => ({ ...prev, [key]: value }));
@@ -276,25 +304,76 @@ export function UsersTable({
 
   return (
     <div>
-      <div className="mb-4 flex items-center justify-between">
-        <p className="text-sm text-ink-soft">
-          {users.length} account{users.length === 1 ? "" : "s"}
-        </p>
-        <div className="flex items-center gap-2">
-          <Button variant="outline" size="sm" onClick={() => router.refresh()} leftIcon={<RefreshCw className="h-4 w-4" />}>
-            Refresh
-          </Button>
-          <Button
-            size="sm"
-            leftIcon={<Plus className="h-4 w-4" />}
-            onClick={() => {
-              setNewUser((prev) => ({ ...prev, password: generatePassword(), showPassword: true }));
-              setError("");
-              setCreateOpen(true);
-            }}
+      <div className="mb-4 space-y-3">
+        <div className="flex flex-wrap items-center justify-between gap-2">
+          <p className="text-sm text-ink-soft">
+            {hasActiveFilters
+              ? `${filteredUsers.length} of ${users.length} account${users.length === 1 ? "" : "s"}`
+              : `${users.length} account${users.length === 1 ? "" : "s"}`}
+          </p>
+          <div className="flex items-center gap-2">
+            <Button variant="outline" size="sm" onClick={() => router.refresh()} leftIcon={<RefreshCw className="h-4 w-4" />}>
+              Refresh
+            </Button>
+            <Button
+              size="sm"
+              leftIcon={<Plus className="h-4 w-4" />}
+              onClick={() => {
+                setNewUser((prev) => ({ ...prev, password: generatePassword(), showPassword: true }));
+                setError("");
+                setCreateOpen(true);
+              }}
+            >
+              Create account
+            </Button>
+          </div>
+        </div>
+
+        <div className="grid gap-2 sm:grid-cols-[1fr_auto_auto]">
+          <div className="relative">
+            <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-ash-500" />
+            <Input
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              placeholder="Search by name, email or phone…"
+              className="pl-9 pr-9"
+              aria-label="Search users"
+            />
+            {query && (
+              <button
+                type="button"
+                onClick={() => setQuery("")}
+                aria-label="Clear search"
+                className="absolute right-2 top-1/2 -translate-y-1/2 rounded p-1 text-ash-500 hover:text-ink"
+              >
+                <X className="h-4 w-4" />
+              </button>
+            )}
+          </div>
+          <Select
+            value={roleFilter}
+            onChange={(e) => setRoleFilter(e.target.value)}
+            aria-label="Filter by role"
+            className="sm:w-44"
           >
-            Create account
-          </Button>
+            <option value="ALL">All roles</option>
+            <option value="STUDENT">Students</option>
+            <option value="TEACHER">Teachers</option>
+            <option value="PARENT">Parents</option>
+            <option value="ADMIN">Admins</option>
+            {currentRole === "SUPER_ADMIN" && <option value="SUPER_ADMIN">Super admins</option>}
+          </Select>
+          <Select
+            value={statusFilter}
+            onChange={(e) => setStatusFilter(e.target.value)}
+            aria-label="Filter by status"
+            className="sm:w-40"
+          >
+            <option value="ALL">Any status</option>
+            <option value="ACTIVE">Active</option>
+            <option value="INACTIVE">Inactive</option>
+            <option value="SUSPENDED">Suspended</option>
+          </Select>
         </div>
       </div>
 
@@ -302,6 +381,14 @@ export function UsersTable({
         <div className="py-14 text-center">
           <p className="font-display text-lg font-semibold text-ink">No accounts yet</p>
           <p className="mt-1 text-sm text-ink-soft">Create your first account to get started.</p>
+        </div>
+      ) : filteredUsers.length === 0 ? (
+        <div className="py-14 text-center">
+          <p className="font-display text-lg font-semibold text-ink">No matching accounts</p>
+          <p className="mt-1 text-sm text-ink-soft">Try a different name, email or filter.</p>
+          <Button variant="outline" size="sm" className="mt-4" onClick={clearFilters}>
+            Clear search
+          </Button>
         </div>
       ) : (
         <div className="overflow-x-auto">
@@ -317,7 +404,7 @@ export function UsersTable({
               </tr>
             </thead>
             <tbody className="divide-y divide-border">
-              {users.map((user) => (
+              {filteredUsers.map((user) => (
                 <tr key={user.id}>
                   <td className="py-3 pr-4 align-top">
                     <p className="font-medium text-ink">{user.fullName}</p>
