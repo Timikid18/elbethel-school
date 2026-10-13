@@ -2,6 +2,8 @@ import * as React from "react";
 import { cn } from "@/lib/utils";
 import { Reveal } from "../ui/reveal";
 
+const DOT_COLORS = ["#ffc83d", "#47b6ea", "#ff7a6b", "#2fc39b", "#8b7be8"];
+
 export function SectionHeading({
   eyebrow,
   title,
@@ -25,16 +27,14 @@ export function SectionHeading({
       )}
     >
       {eyebrow && (
-        <p
-          className={cn(
-            "eyebrow",
-            !centered && "justify-start [&::before]:hidden",
-          )}
-        >
-          {eyebrow}
+        <p className={cn("flex", centered ? "justify-center" : "justify-start")}>
+          <span className="play-chip bg-royal-100 text-royal-accent">
+            <span className="h-1.5 w-1.5 rounded-full bg-gold" aria-hidden />
+            {eyebrow}
+          </span>
         </p>
       )}
-      <h2 className="mt-4 font-display text-3xl font-semibold leading-[1.08] tracking-tight text-ink text-balance sm:text-4xl lg:text-[2.55rem]">
+      <h2 className="mt-5 font-display text-3xl font-bold leading-[1.08] tracking-tight text-ink text-balance sm:text-4xl lg:text-[2.6rem]">
         {title}
       </h2>
       {description && (
@@ -43,10 +43,14 @@ export function SectionHeading({
         </p>
       )}
       {centered && (
-        <div className="mt-7 flex justify-center">
-          <span className="divider-gold" aria-hidden>
-            <span className="diamond" />
-          </span>
+        <div className="mt-7 flex justify-center gap-1.5" aria-hidden>
+          {DOT_COLORS.map((c) => (
+            <span
+              key={c}
+              className="h-2.5 w-2.5 rounded-full"
+              style={{ backgroundColor: c }}
+            />
+          ))}
         </div>
       )}
     </Reveal>

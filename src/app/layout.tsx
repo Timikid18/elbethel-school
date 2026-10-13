@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Inter, Playfair_Display } from "next/font/google";
+import { Inter, Playfair_Display, Fredoka, Nunito } from "next/font/google";
 import "./globals.css";
 import { ToastProvider } from "@/components/ui/toast";
 import { PageLoadOverlay } from "@/components/ui/page-load-overlay";
@@ -22,6 +22,19 @@ const playfair = Playfair_Display({
   subsets: ["latin"],
   weight: ["500", "600", "700", "800"],
   style: ["normal", "italic"],
+  display: "swap",
+});
+
+// Playful, school-like faces used only by the public site (see .public-theme).
+const fredoka = Fredoka({
+  variable: "--font-fredoka",
+  subsets: ["latin"],
+  display: "swap",
+});
+
+const nunito = Nunito({
+  variable: "--font-nunito",
+  subsets: ["latin"],
   display: "swap",
 });
 
@@ -79,7 +92,7 @@ export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en" suppressHydrationWarning className={`${inter.variable} ${playfair.variable} antialiased`}>
+    <html lang="en" suppressHydrationWarning className={`${inter.variable} ${playfair.variable} ${fredoka.variable} ${nunito.variable} antialiased`}>
       <body suppressHydrationWarning className="min-h-screen bg-surface text-ink font-sans">
         <JsonLd data={schoolSchema()} />
         <ThemeProvider>

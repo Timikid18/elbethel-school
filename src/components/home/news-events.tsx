@@ -9,6 +9,8 @@ const monthNames = [
   "Jul", "Aug", "Sep", "Oct", "Nov", "Dec",
 ];
 
+const ACCENTS = ["#ff7a6b", "#47b6ea", "#8b7be8"];
+
 function formatDate(d: Date) {
   return `${monthNames[d.getMonth()]} ${d.getDate()}`;
 }
@@ -49,39 +51,49 @@ export async function NewsEvents() {
       />
 
       <div className="mt-14 grid gap-6 md:grid-cols-3">
-        {items.map((e, i) => (
-          <Reveal
-            key={e.title}
-            delay={i * 80}
-            className="group flex flex-col overflow-hidden rounded-[var(--radius-md)] border border-border bg-surface p-7 transition-all duration-200 hover:-translate-y-1 hover:border-royal-300 hover:shadow-[var(--shadow-md)]"
-          >
-            <div className="flex items-center gap-3">
-              <span className="flex h-12 w-12 flex-col items-center justify-center rounded-[var(--radius)] bg-royal text-white transition-colors group-hover:bg-royal-600">
-                <CalendarDays className="h-4 w-4 text-gold" />
-                <span className="mt-0.5 text-xs font-semibold">
-                  {formatDate(e.startDate)}
+        {items.map((e, i) => {
+          const accent = ACCENTS[i % ACCENTS.length];
+          return (
+            <Reveal
+              key={e.title}
+              delay={i * 80}
+              className="group flex flex-col overflow-hidden rounded-[1.75rem] border border-border bg-surface p-7 shadow-sm transition-all duration-200 hover:-translate-y-1.5 hover:shadow-[var(--shadow-md)]"
+            >
+              <div className="flex items-center gap-3">
+                <span
+                  className="flex h-14 w-14 flex-col items-center justify-center rounded-2xl text-white shadow-sm transition-transform duration-200 group-hover:scale-105"
+                  style={{ backgroundColor: accent }}
+                >
+                  <CalendarDays className="h-4 w-4 text-white/80" />
+                  <span className="mt-0.5 text-xs font-bold">
+                    {formatDate(e.startDate)}
+                  </span>
                 </span>
-              </span>
-              <span className="inline-flex items-center gap-1.5 text-xs font-medium uppercase tracking-wide text-royal-500">
-                <span className="h-1.5 w-1.5 rounded-full bg-gold" />
-                Upcoming
-              </span>
-            </div>
-            <h3 className="mt-5 font-display text-lg font-semibold leading-snug text-ink">
-              {e.title}
-            </h3>
-            <p className="mt-2 flex-1 text-sm leading-relaxed text-ink-soft">
-              {e.description}
-            </p>
-            <span className="mt-6 block h-px w-full bg-gradient-to-r from-gold/60 to-transparent group-hover:from-gold" aria-hidden />
-          </Reveal>
-        ))}
+                <span className="inline-flex items-center gap-1.5 rounded-full bg-ash-100 px-3 py-1 text-xs font-bold uppercase tracking-wide text-royal-500">
+                  <span className="h-1.5 w-1.5 rounded-full bg-gold" />
+                  Upcoming
+                </span>
+              </div>
+              <h3 className="mt-5 font-display text-lg font-bold leading-snug text-ink">
+                {e.title}
+              </h3>
+              <p className="mt-2 flex-1 text-sm leading-relaxed text-ink-soft">
+                {e.description}
+              </p>
+              <span
+                className="mt-6 block h-1 w-12 rounded-full transition-all duration-300 group-hover:w-20"
+                style={{ backgroundColor: accent }}
+                aria-hidden
+              />
+            </Reveal>
+          );
+        })}
       </div>
 
       <div className="mt-10 text-center">
         <Link
           href="/news"
-          className="inline-flex h-11 items-center gap-2 rounded-[var(--radius)] border border-ash-400 bg-surface px-6 text-sm font-medium text-ink transition-colors hover:bg-ash-100"
+          className="inline-flex h-11 items-center gap-2 rounded-full border border-ash-400 bg-surface px-6 text-sm font-bold text-ink transition-colors hover:bg-ash-100"
         >
           View All News & Events <ArrowRight className="h-4 w-4" />
         </Link>

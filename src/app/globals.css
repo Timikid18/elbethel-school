@@ -186,6 +186,15 @@ html.dark {
 
   --color-border: var(--border);
 
+  /* Playful accents for the public landing page */
+  --color-play-sun: #ffc83d;
+  --color-play-sky: #47b6ea;
+  --color-play-coral: #ff7a6b;
+  --color-play-mint: #2fc39b;
+  --color-play-grape: #8b7be8;
+  --color-play-leaf: #63bd45;
+  --color-play-pink: #ff8fc4;
+
   --font-display: var(--font-playfair), "Palatino Linotype", "Book Antiqua",
     Palatino, Georgia, serif;
   --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
@@ -439,6 +448,87 @@ html.dark .lift-card {
 }
 @media (prefers-reduced-motion: reduce) {
   .float-sway { animation: none; }
+}
+
+/* ============================================================
+   Playful public-site theme
+   Scoped to .public-theme so the admin/portal keep their fonts.
+   ============================================================ */
+.public-theme {
+  /* Swap the editorial serif/sans for rounded, friendly faces */
+  --font-playfair: var(--font-fredoka);
+  --font-inter: var(--font-nunito);
+  font-family: var(--font-nunito), ui-rounded, "Segoe UI", system-ui, sans-serif;
+}
+
+.public-theme :is(h1, h2, h3, h4, h5) {
+  font-family: var(--font-fredoka), ui-rounded, "Segoe UI", system-ui, sans-serif;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+/* Emphasis words lean on the rounded body face for a hand-annotated feel. */
+.public-theme .display-italic {
+  font-family: var(--font-fredoka), ui-rounded, "Segoe UI", system-ui, sans-serif;
+  font-style: normal;
+  font-weight: 600;
+}
+
+/* Hand-drawn marker underline for key words. */
+.play-underline {
+  position: relative;
+  z-index: 0;
+  white-space: nowrap;
+}
+.play-underline::after {
+  content: "";
+  position: absolute;
+  left: -2px;
+  right: -2px;
+  bottom: 0.02em;
+  height: 0.42em;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 14' preserveAspectRatio='none'%3E%3Cpath d='M2 9C18 3 34 3 50 8S86 12 118 5' fill='none' stroke='%23ffc83d' stroke-width='7' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+  z-index: -1;
+  border-radius: 999px;
+}
+
+/* Soft rounded "sticker"/chip used for tags and badges. */
+.play-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  border-radius: 999px;
+  padding: 0.3rem 0.75rem;
+  font-weight: 700;
+  font-size: 0.75rem;
+  letter-spacing: 0.01em;
+}
+
+/* Slightly rotated sticker look for floating labels. */
+.play-tilt-l { transform: rotate(-3deg); }
+.play-tilt-r { transform: rotate(3deg); }
+
+@keyframes play-wiggle {
+  0%, 100% { transform: rotate(-4deg); }
+  50% { transform: rotate(4deg); }
+}
+.play-wiggle {
+  animation: play-wiggle 3.6s ease-in-out infinite;
+}
+
+@keyframes play-bob {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+.play-bob {
+  animation: play-bob 5s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .play-wiggle,
+  .play-bob { animation: none; }
 }
 
 /* ---------- AI assistant widget ---------- */
