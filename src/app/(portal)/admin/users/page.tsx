@@ -21,6 +21,10 @@ export default async function AdminUsersPage() {
     }),
   ]);
 
+  const studentCount = users.filter((u) => u.role === "STUDENT").length;
+  const teacherCount = users.filter((u) => u.role === "TEACHER").length;
+  const adminCount = users.filter((u) => u.role === "ADMIN" || u.role === "SUPER_ADMIN").length;
+
   return (
     <div className="space-y-6">
       <div>
@@ -31,7 +35,7 @@ export default async function AdminUsersPage() {
         </p>
       </div>
 
-      <div className="grid gap-3 sm:grid-cols-3">
+      <div className="grid gap-3 sm:grid-cols-3 lg:grid-cols-6">
         <Card className="p-4">
           <p className="text-sm font-medium text-ink-soft">Total accounts</p>
           <p className="mt-1 font-display text-2xl font-semibold text-ink tabular-nums">
@@ -42,6 +46,24 @@ export default async function AdminUsersPage() {
           <p className="text-sm font-medium text-ink-soft">Active users</p>
           <p className="mt-1 font-display text-2xl font-semibold text-ink tabular-nums">
             {activeCount}
+          </p>
+        </Card>
+        <Card className="p-4">
+          <p className="text-sm font-medium text-ink-soft">Students</p>
+          <p className="mt-1 font-display text-2xl font-semibold text-ink tabular-nums">
+            {studentCount}
+          </p>
+        </Card>
+        <Card className="p-4">
+          <p className="text-sm font-medium text-ink-soft">Teachers</p>
+          <p className="mt-1 font-display text-2xl font-semibold text-ink tabular-nums">
+            {teacherCount}
+          </p>
+        </Card>
+        <Card className="p-4">
+          <p className="text-sm font-medium text-ink-soft">Admins</p>
+          <p className="mt-1 font-display text-2xl font-semibold text-ink tabular-nums">
+            {adminCount}
           </p>
         </Card>
         <Card className="p-4">

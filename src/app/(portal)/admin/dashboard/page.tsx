@@ -26,14 +26,25 @@ export default async function AdminDashboardPage() {
   const user = await requireUser();
   if (user.role !== "SUPER_ADMIN" && user.role !== "ADMIN") redirect("/dashboard");
 
-  const [pendingRequests, activeUsers, announcements, galleryCount, pendingAdmissions] =
+  const [pendingRequests, activeUsers, announcements, galleryCount, pendingAdmissions, usersByRole] =
     await Promise.all([
       prisma.changeRequest.count({ where: { status: "PENDING" } }),
       prisma.user.count({ where: { status: "ACTIVE" } }),
       prisma.announcement.count(),
       prisma.galleryImage.count({ where: { isPublished: true } }),
       prisma.admissionApplication.count({ where: { status: "SUBMITTED" } }),
+      prisma.user.groupBy({ by: ["role"], _count: { _all: true } }),
     ]);
+
+  function countRoles(roles: string[]) {
+    return usersByRole
+      .filter((group) => roles.includes(group.role))
+      .reduce((sum, group) => sum + group._count._all, 0);
+  }
+
+  const studentCount = countRoles(["STUDENT"]);
+  const teacherCount = countRoles(["TEACHER"]);
+  const adminCount = countRoles(["ADMIN", "SUPER_ADMIN"]);
 
   return (
     <div className="space-y-8">
@@ -44,7 +55,7 @@ export default async function AdminDashboardPage() {
         <p className="mt-1 text-sm text-ink-soft">School administration overview.</p>
       </div>
 
-      <div className="grid grid-cols-2 gap-4 lg:grid-cols-5">
+      <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
         <Card className="p-4">
           <p className="text-sm font-medium text-ink-soft">Pending approvals</p>
           <p className="mt-1 font-display text-2xl font-semibold text-warning tabular-nums">
@@ -55,6 +66,24 @@ export default async function AdminDashboardPage() {
           <p className="text-sm font-medium text-ink-soft">Active users</p>
           <p className="mt-1 font-display text-2xl font-semibold text-ink tabular-nums">
             {activeUsers}
+          </p>
+        </Card>
+        <Card className="p-4">
+          <p className="text-sm font-medium text-ink-soft">Students</p>
+          <p className="mt-1 font-display text-2xl font-semibold text-ink tabular-nums">
+            {studentCount}
+          </p>
+        </Card>
+        <Card className="p-4">
+          <p className="text-sm font-medium text-ink-soft">Teachers</p>
+          <p className="mt-1 font-display text-2xl font-semibold text-ink tabular-nums">
+            {teacherCount}
+          </p>
+        </Card>
+        <Card className="p-4">
+          <p className="text-sm font-medium text-ink-soft">Admins</p>
+          <p className="mt-1 font-display text-2xl font-semibold text-ink tabular-nums">
+            {adminCount}
           </p>
         </Card>
         <Card className="p-4">
