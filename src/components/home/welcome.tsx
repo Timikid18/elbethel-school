@@ -54,7 +54,7 @@ export function Welcome() {
                 </p>
               </div>
 
-              <span className="play-tilt-r absolute right-5 top-5 flex items-center gap-1.5 rounded-full bg-play-mint px-3 py-1.5 text-xs font-bold text-white shadow-lg">
+              <span className="play-tilt-r absolute right-5 top-5 flex items-center gap-1.5 rounded-full bg-play-mint px-3 py-1.5 text-xs font-bold text-royal shadow-lg">
                 <ThumbsUp className="h-3.5 w-3.5" />
                 Loved by parents
               </span>

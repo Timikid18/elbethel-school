@@ -257,7 +257,7 @@ export default function AboutPage() {
                     </div>
                   ) : (
                     <div className="flex h-full w-full items-center justify-center">
-                      <span className="px-2 text-center font-display text-[10px] text-ash-500">
+                      <span className="px-2 text-center font-display text-[10px] text-ink-soft">
                         [Portrait]
                       </span>
                     </div>

@@ -45,7 +45,7 @@ export function PrincipalMessage() {
               <Quote className="h-6 w-6" />
             </span>
             <blockquote className="mt-6">
-              <p className="font-display text-xl leading-relaxed text-royal-100 sm:text-2xl">
+              <p className="font-display text-xl leading-relaxed text-white/90 sm:text-2xl">
                 “We believe that every child is a king and queen in the making
                 — endowed with the potential to lead, to serve and to shine.
                 Our duty is to draw out that greatness through knowledge,

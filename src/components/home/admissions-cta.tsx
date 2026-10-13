@@ -74,7 +74,7 @@ export function AdmissionsCTA() {
                   >
                     <Icon className="h-5 w-5" />
                   </span>
-                  <span className="text-sm font-semibold text-royal-100">
+                  <span className="text-sm font-semibold text-white/90">
                     {s.label}
                   </span>
                   {i < steps.length - 1 && (

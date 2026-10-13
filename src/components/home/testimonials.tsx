@@ -50,7 +50,7 @@ export function Testimonials() {
                 </p>
                 <div className="mt-4 flex items-center gap-3 pt-3 hairline sm:mt-6 sm:pt-4">
                   <span
-                    className="flex h-10 w-10 items-center justify-center rounded-full text-sm font-bold text-white"
+                    className="flex h-10 w-10 items-center justify-center rounded-full text-sm font-bold text-royal"
                     style={{ backgroundColor: accent }}
                     aria-hidden
                   >
@@ -58,11 +58,11 @@ export function Testimonials() {
                   </span>
                   <div className="leading-tight">
                     <p className="font-bold text-ink">{t.name}</p>
-                    <p className="text-xs text-ash-500">{t.role}</p>
+                    <p className="text-xs text-ink-soft">{t.role}</p>
                   </div>
                 </div>
                 {t.sample && (
-                  <p className="mt-3 text-[11px] font-medium uppercase tracking-wide text-ash-400">
+                  <p className="mt-3 text-[11px] font-medium uppercase tracking-wide text-ash-600">
                     Awaiting official testimonial
                   </p>
                 )}

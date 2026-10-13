@@ -61,10 +61,10 @@ export async function NewsEvents() {
             >
               <div className="flex items-center gap-3">
                 <span
-                  className="flex h-14 w-14 flex-col items-center justify-center rounded-2xl text-white shadow-sm transition-transform duration-200 group-hover:scale-105"
+                  className="flex h-14 w-14 flex-col items-center justify-center rounded-2xl text-royal shadow-sm transition-transform duration-200 group-hover:scale-105"
                   style={{ backgroundColor: accent }}
                 >
-                  <CalendarDays className="h-4 w-4 text-white/80" />
+                  <CalendarDays className="h-4 w-4 text-royal/70" />
                   <span className="mt-0.5 text-xs font-bold">
                     {formatDate(e.startDate)}
                   </span>

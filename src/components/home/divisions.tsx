@@ -75,7 +75,7 @@ export function Divisions() {
                       0{i + 1}
                     </span>
                     <span
-                      className="flex h-12 w-12 items-center justify-center rounded-2xl text-white shadow-sm transition-transform duration-200 group-hover:scale-110"
+                      className="flex h-12 w-12 items-center justify-center rounded-2xl text-royal shadow-sm transition-transform duration-200 group-hover:scale-110"
                       style={{ backgroundColor: style.color }}
                     >
                       <Icon className="h-6 w-6" />

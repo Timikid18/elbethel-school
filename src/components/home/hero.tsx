@@ -19,8 +19,8 @@ import { ButtonLink } from "@/components/ui/button";
 
 const badges = [
   { icon: Award, label: "Academic Excellence", color: "#ffc83d", fg: "#0b1f4b" },
-  { icon: ShieldCheck, label: "Safe Environment", color: "#47b6ea", fg: "#ffffff" },
-  { icon: Heart, label: "Character Led", color: "#ff7a6b", fg: "#ffffff" },
+  { icon: ShieldCheck, label: "Safe Environment", color: "#47b6ea", fg: "#0b1f4b" },
+  { icon: Heart, label: "Character Led", color: "#ff7a6b", fg: "#0b1f4b" },
 ];
 
 // Decorative school supplies that gently bob around the hero.
@@ -163,7 +163,7 @@ export function Hero() {
               </div>
 
               {/* Sticker: motto */}
-              <div className="play-tilt-l absolute -bottom-5 -left-4 hidden items-center gap-3 rounded-2xl border border-white/15 bg-white/95 p-3.5 text-ink shadow-xl backdrop-blur sm:flex">
+              <div className="play-tilt-l absolute -bottom-5 -left-4 hidden items-center gap-3 rounded-2xl border border-white/15 bg-white/95 p-3.5 text-royal-700 shadow-xl backdrop-blur sm:flex">
                 <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-gold text-royal shadow">
                   <Award className="h-5 w-5" />
                 </span>
@@ -171,7 +171,7 @@ export function Hero() {
                   <p className="font-display text-sm font-bold text-royal">
                     Fountain of Knowledge
                   </p>
-                  <p className="text-xs font-semibold text-ink-soft">
+                  <p className="text-xs font-semibold text-royal-700">
                     Learn · Lead · Serve
                   </p>
                 </div>

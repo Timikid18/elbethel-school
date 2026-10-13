@@ -81,7 +81,7 @@ export function WhyChoose() {
               <span className="h-px w-12 bg-gold" aria-hidden />
               <Link
                 href="/about"
-                className="text-sm font-bold text-royal-accent transition-colors hover:text-royal"
+                className="text-sm font-bold text-royal-accent transition-colors hover:text-ink"
               >
                 More about our values
               </Link>
@@ -102,7 +102,7 @@ export function WhyChoose() {
                   className="group flex gap-5 rounded-2xl p-4 transition-colors hover:bg-ash-100/70 sm:p-5"
                 >
                   <span
-                    className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl text-white shadow-sm transition-transform duration-200 group-hover:scale-110"
+                    className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl text-royal shadow-sm transition-transform duration-200 group-hover:scale-110"
                     style={{ backgroundColor: p.color }}
                   >
                     <Icon className="h-6 w-6" />

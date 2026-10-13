@@ -50,7 +50,7 @@ export function SchoolLife() {
               className="group flex items-center gap-3 rounded-2xl border border-border bg-surface px-4 py-4 transition-all duration-200 hover:-translate-y-1 hover:shadow-[var(--shadow)]"
             >
               <span
-                className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl text-white transition-transform duration-200 group-hover:scale-110"
+                className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl text-royal transition-transform duration-200 group-hover:scale-110"
                 style={{ backgroundColor: a.color }}
               >
                 <Icon className="h-5 w-5" />
